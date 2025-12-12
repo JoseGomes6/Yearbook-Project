@@ -4,9 +4,11 @@ body {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
+  height: auto;
   font-family: Arial, sans-serif;
   background: #f0f0f0;
+  overflow-x: hidden;
 }
 
 /* ===================== LOGIN / REGISTER ===================== */
@@ -16,7 +18,6 @@ body {
   align-items: stretch;
   height: 100vh;
   width: 100vw;
-  overflow: hidden;
 }
 
 .container {
@@ -98,6 +99,18 @@ button:hover {
 }
 
 /* ===================== GETSTARTED / YEARBOOK ===================== */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 10%;
+  padding-right: 10%;
+  width: 100%;
+  padding-bottom: 150px;
+  height: auto;
+}
+
 .getstarted-container {
   display: flex;
   flex-direction: column;
@@ -126,24 +139,35 @@ button:hover {
 .cover-wrapper {
   position: relative;
   width: 100%;
-  height: 400px;
+  height: 300px;
   margin-bottom: 100px;
 }
 
-.cover-photo {
+.cover-upload {
   width: 100%;
   height: 100%;
   background: #3a4a5a;
   display: flex;
   justify-content: center;
+  border-radius: 25px;
   align-items: center;
   color: #ddd;
   font-weight: bold;
   font-size: 28px;
 }
 
+.cover-icon {
+  cursor: pointer;
+  align-items: center;
+}
+
+.profile-icon {
+  cursor: pointer;
+  align-items: center;
+}
+
 /* Profile photo sobreposta */
-.profile-photo {
+.profile-upload {
   width: 150px;
   height: 150px;
   border-radius: 50%;
@@ -166,8 +190,8 @@ button:hover {
   padding: 0 5%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 30px;
+  align-items: flex-start; /* alinhado à esquerda */
+  gap: 0px;
 }
 
 /* Tabs */
@@ -181,13 +205,20 @@ button:hover {
 }
 
 .tab-btn {
-  background: none;
-  border: none;
+  background: none; /* sem fundo */
+  border: none; /* sem borda */
   padding: 10px 15px;
   font-size: 16px;
   cursor: pointer;
   color: #555;
   position: relative;
+  outline: none;
+  transition: color 0.3s;
+}
+
+.tab-btn:hover {
+  color: #39616a;
+  background: none;
 }
 
 .tab-btn.active {
@@ -209,16 +240,17 @@ button:hover {
 /* Colunas de inputs */
 .tab-content {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
 }
 
 .columns-wrapper {
   display: flex;
   gap: 40px;
-  justify-content: center;
+  justify-content: flex-start;
   flex-wrap: wrap;
   width: 100%;
+  padding-left: 0%;
 }
 
 .column {
@@ -241,19 +273,176 @@ input {
 /* Botão Continue */
 .btn-continue {
   margin-top: 20px;
-  width: 200px;
-  padding: 12px;
+  padding-left: 10px;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   background-color: #39616a;
   color: white;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
+  width: 100%; /* ocupa toda a largura da coluna/pai */
+  max-width: 250px; /* mantém largura igual aos inputs */
+  align-self: flex-start; /* alinhado à esquerda */
+  box-sizing: border-box;
 }
 
 .btn-continue:hover {
   background-color: #2e4a56;
+}
+
+/* Achievements Tab */
+.achievements-list {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.achievement-item {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  width: 200px;
+  background-color: #f9f9f9;
+}
+
+.achievement-item strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.achievement-add {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px dashed #39616a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  color: #39616a;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.achievement-add:hover {
+  background-color: #39616a;
+  color: white;
+  border: 2px dashed white;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal-content h3 {
+  margin: 0 0 10px 0;
+}
+
+.modal-content input[type="text"],
+.modal-content textarea,
+.modal-content input[type="file"] {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.modal-content textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.modal-buttons button {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-buttons button[type="submit"] {
+  background-color: #39616a;
+  color: white;
+}
+
+.modal-buttons button[type="button"] {
+  background-color: #ccc;
+  color: #333;
+}
+
+/* Quote textarea */
+.tab.quote textarea {
+  width: 100%;
+  max-width: 600px; /* largura máxima */
+  height: 120px; /* altura aumentada */
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  resize: none; /* impede redimensionamento manual */
+}
+
+/* Contador da Quote */
+.quote-counter {
+  text-align: right;
+  font-size: 14px;
+  margin-top: 4px;
+  color: #555;
+}
+
+.quote-counter.over-limit {
+  color: red;
+  font-weight: bold;
+}
+
+.input-field-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.input-field-wrapper label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 0.9em;
+  color: #333;
+}
+
+.input-field-wrapper input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
 }
 
 /* ===================== RESPONSIVO ===================== */
@@ -303,8 +492,17 @@ input {
     width: 100%;
   }
 
-  /* Login/Register responsivo */
   .container {
+    width: 90%;
+  }
+}
+
+@media (max-width: 500px) {
+  .achievement-item {
+    width: 100%;
+  }
+
+  .modal-content {
     width: 90%;
   }
 }
