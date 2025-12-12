@@ -1,24 +1,24 @@
+/* ===================== RESET GLOBAL ===================== */
 html,
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
   width: 100%;
-  overflow: hidden; /* evita scroll horizontal */
+  height: 100%;
   font-family: Arial, sans-serif;
   background: #f0f0f0;
 }
 
+/* ===================== LOGIN / REGISTER ===================== */
 .app-wrapper {
   display: flex;
-  justify-content: flex-start; /* card à esquerda */
-  align-items: stretch; /* estica verticalmente */
+  justify-content: flex-start;
+  align-items: stretch;
   height: 100vh;
   width: 100vw;
   overflow: hidden;
 }
 
-/* Card de login/register */
 .container {
   width: 38%;
   min-width: 250px;
@@ -28,8 +28,9 @@ body {
   color: #f0f0f0;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* conteúdo centralizado verticalmente */
+  justify-content: center;
   height: 100%;
+  position: relative;
 }
 
 .container::after {
@@ -46,7 +47,7 @@ body {
     transparent 1px,
     transparent 2px
   );
-  pointer-events: none; /* para não interferir nos cliques */
+  pointer-events: none;
 }
 
 .input-wrapper {
@@ -56,7 +57,7 @@ body {
 
 .input-wrapper input {
   width: 75%;
-  padding: 12px 10px 12px 35px; /* deixa espaço para o ícone */
+  padding: 12px 10px 12px 35px;
   border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 16px;
@@ -65,20 +66,10 @@ body {
 
 .input-icon {
   position: absolute;
-  top: 35%;
+  top: 45%;
   left: 10px;
   transform: translateY(-50%);
   color: #2e4a56;
-}
-
-input {
-  width: 75%;
-  padding: 12px 10px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 16px;
-  box-sizing: border-box;
 }
 
 button {
@@ -106,16 +97,24 @@ button:hover {
   color: #fff;
 }
 
-.getstarted-main {
-  padding: 30px;
+/* ===================== GETSTARTED / YEARBOOK ===================== */
+.getstarted-container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  align-items: center;
+  width: 100%;
+}
+
+/* Header: título e subtítulo */
+.getstarted-header {
+  width: 100%;
+  text-align: left;
+  padding: 20px 5%;
 }
 
 .getstarted-header h1 {
   margin: 0;
-  font-size: 28px;
+  font-size: 32px;
 }
 
 .getstarted-header h4 {
@@ -123,48 +122,62 @@ button:hover {
   color: #666;
 }
 
-.cover-photo-container {
-  display: flex;
-  align-items: flex-end;
-  gap: 20px;
-  margin-bottom: 20px;
+/* Cover full-width */
+.cover-wrapper {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  margin-bottom: 100px;
 }
 
 .cover-photo {
-  width: 900px;
-  height: 200px;
+  width: 100%;
+  height: 100%;
   background: #3a4a5a;
-  border-radius: 12px;
-  position: relative;
-  flex-shrink: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.cover-text {
   color: #ddd;
   font-weight: bold;
+  font-size: 28px;
 }
 
+/* Profile photo sobreposta */
 .profile-photo {
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   background: #555;
-  border: 4px solid white;
+  border: 5px solid white;
+  position: absolute;
+  left: 50px;
+  bottom: -75px;
   display: flex;
   justify-content: center;
   align-items: center;
   color: #ddd;
   font-weight: bold;
+  font-size: 18px;
 }
 
+/* Conteúdo abaixo da cover */
+.getstarted-main {
+  width: 100%;
+  padding: 0 5%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+/* Tabs */
 .tabs {
   display: flex;
   gap: 30px;
   border-bottom: 2px solid #ccc;
   margin-bottom: 20px;
+  justify-content: center;
+  width: 100%;
 }
 
 .tab-btn {
@@ -173,8 +186,8 @@ button:hover {
   padding: 10px 15px;
   font-size: 16px;
   cursor: pointer;
-  position: relative;
   color: #555;
+  position: relative;
 }
 
 .tab-btn.active {
@@ -193,15 +206,27 @@ button:hover {
   border-radius: 2px;
 }
 
+/* Colunas de inputs */
 .tab-content {
   display: flex;
-  gap: 20px;
+  justify-content: center;
+  width: 100%;
+}
+
+.columns-wrapper {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 .column {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  flex: 1;
+  min-width: 250px;
 }
 
 input {
@@ -209,8 +234,11 @@ input {
   border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
+/* Botão Continue */
 .btn-continue {
   margin-top: 20px;
   width: 200px;
@@ -222,9 +250,61 @@ input {
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  align-self: flex-start;
 }
 
 .btn-continue:hover {
   background-color: #2e4a56;
+}
+
+/* ===================== RESPONSIVO ===================== */
+@media (max-width: 900px) {
+  .cover-wrapper {
+    height: 300px;
+  }
+
+  .profile-photo {
+    width: 120px;
+    height: 120px;
+    bottom: -60px;
+  }
+
+  .columns-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  input {
+    width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .cover-wrapper {
+    height: 200px;
+  }
+
+  .profile-photo {
+    width: 100px;
+    height: 100px;
+    bottom: -50px;
+    left: 20px;
+  }
+
+  .getstarted-header {
+    padding: 20px 10px;
+  }
+
+  input {
+    width: 100%;
+  }
+
+  .btn-continue {
+    width: 100%;
+  }
+
+  /* Login/Register responsivo */
+  .container {
+    width: 90%;
+  }
 }
