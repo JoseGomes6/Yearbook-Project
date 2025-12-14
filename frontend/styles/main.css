@@ -400,6 +400,34 @@ input {
   color: #333;
 }
 
+/* Estilo do Contêiner do Item */
+.achievement-item {
+  display: flex; /* 1. Habilita o Flexbox */
+  justify-content: space-between; /* 2. Empurra os filhos para os lados (Texto e Imagem) */
+  align-items: center; /* 3. Alinha verticalmente ao centro */
+
+  /* Adicione seus estilos de borda/padding/margem aqui */
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+/* Estilo do Texto (ocupa o espaço restante) */
+.achievement-text {
+  flex-grow: 1; /* Permite que o texto ocupe a maior parte do espaço */
+  padding-right: 15px; /* Adiciona algum espaço entre o texto e a imagem */
+}
+
+/* Estilo da Imagem (fixa no lado direito) */
+.achievement-image {
+  width: 60px; /* Tamanho fixo para a foto */
+  height: 60px;
+  object-fit: cover; /* Garante que a imagem preencha o espaço sem distorcer */
+  border-radius: 4px; /* Opcional: bordas arredondadas */
+}
+
 /* Quote textarea */
 .tab.quote textarea {
   width: 100%;
@@ -445,6 +473,555 @@ input {
   border-radius: 10px;
 }
 
+/* --------------- Animação de Finalização --------------- */
+
+.finish-animation-overlay {
+  position: fixed; /* Fixa sobre tudo */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9); /* Fundo escuro */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Garante que está acima de tudo */
+  overflow: hidden; /* Para a animação de subir */
+  opacity: 0; /* Começa invisível */
+  transition: opacity 0.3s ease-in-out; /* Transição suave */
+}
+
+.finish-animation-overlay.animation-step-1,
+.finish-animation-overlay.animation-step-2,
+.finish-animation-overlay.animation-step-3 {
+  opacity: 1; /* Torna-se visível durante a animação */
+}
+
+.welcome-text {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* Uma fonte agradável */
+  font-size: 3em; /* Tamanho do texto */
+  color: #fff;
+  white-space: nowrap; /* Impede que o texto quebre linha */
+  overflow: hidden; /* Esconde o texto que ainda não foi "digitado" */
+  border-right: 0.15em solid orange; /* Cursor de digitação */
+  margin: 0 auto; /* Centraliza */
+  animation: none; /* Inicialmente sem animação */
+}
+
+/* Animação de digitação (Step 1) */
+.finish-animation-overlay.animation-step-1 .welcome-text {
+  animation: typing 2s steps(28, end),
+    /* Digitando */ blink-caret 0.75s step-end infinite; /* Cursor piscando */
+  width: 15.5em; /* Ajuste para o número de caracteres "Welcome to your Yearbook!" */
+}
+
+/* Animação de subir e desaparecer (Step 2) */
+.finish-animation-overlay.animation-step-2 .welcome-text {
+  border-right: none; /* Remove o cursor */
+  animation: fade-out-up 1.5s ease-in-out forwards; /* Sobe e desaparece */
+}
+
+/* Animação de transição para a próxima página (Step 3) - apenas para transição de opacidade do overlay */
+.finish-animation-overlay.animation-step-3 {
+  opacity: 0; /* Transiciona para invisível */
+}
+
+/* Keyframes para a animação de digitação */
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 15.5em;
+  } /* Ajuste este valor para o comprimento final do texto */
+}
+
+/* Keyframes para o cursor piscando */
+@keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: orange;
+  }
+}
+
+/* Keyframes para subir e desaparecer */
+@keyframes fade-out-up {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+}
+
+/* ===================== Yearbook ===================== */
+
+/* Container da Página */
+.yearbook-page-container {
+  /* Mantém o padding e a largura máxima do GetStarted */
+  padding-left: 10%;
+  padding-right: 10%;
+  width: 100%;
+  max-width: 100%; /* Permite que o padding controle a largura */
+  margin: 0 auto; /* Centraliza, embora o padding seja o fator principal */
+  box-sizing: border-box;
+}
+
+.yearbook-title {
+  width: 100%;
+  text-align: left; /* Alinhamento à esquerda */
+  padding: 20px 0; /* Padding superior e inferior, mas 0 nas laterais */
+  font-size: 32px;
+  margin: 0;
+}
+
+/* Filtros (Barra com 3 elementos) */
+.yearbook-filters {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  width: 100%; /* Garante que ocupem toda a largura do container */
+}
+
+.yearbook-filters input,
+.yearbook-filters select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  flex-grow: 1; /* Distribui o espaço entre as 3 barras */
+}
+
+/* Grid de Membros (3 Colunas) */
+.members-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 3 colunas de tamanho igual */
+  gap: 20px;
+}
+
+/* Retângulo do Membro (Card) */
+.member-card {
+  display: flex;
+  border: 1px solid #eee;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: relative; /* Necessário para posicionar o botão no canto */
+}
+
+/* Imagem Redonda */
+.member-photo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%; /* Torna a foto redonda */
+  object-fit: cover;
+  margin-right: 15px;
+}
+
+/* Informações do Membro */
+.member-info-left {
+  flex-shrink: 0; /* Impede que a foto encolha */
+}
+
+.member-info-right {
+  flex-grow: 1;
+}
+
+.member-name {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.member-detail {
+  font-size: 0.9em;
+  margin: 3px 0;
+}
+
+/* Botão Adicionar Amigo (Canto Inferior Direito) */
+.btn-add-friend {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s;
+}
+
+.btn-add-friend:hover {
+  background-color: #0056b3;
+}
+
+/* ===================== SIDEBAR (Navegação Autenticada) ===================== */
+
+.app-sidebar {
+  width: 250px;
+  background-color: #273648; /* Cor escura do seu Login */
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-shrink: 0;
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+  /* Propriedades para fixar a barra lateral e mantê-la visível */
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.sidebar-logo {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 40px;
+  color: #a6d7e2;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 12px 15px;
+  border: none;
+  background: none;
+  color: white;
+  font-size: 1em;
+  text-align: left;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.sidebar-btn:hover {
+  background-color: #39616a;
+}
+
+.sidebar-btn.active {
+  background-color: #a6d7e2;
+  color: #273648;
+  font-weight: bold;
+}
+
+.sidebar-btn .icon {
+  margin-right: 15px;
+  font-size: 1.2em;
+}
+
+/* Footer e Logout */
+.sidebar-footer {
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logout-btn {
+  width: 100%;
+  /* Reutiliza o estilo do botão de logout, ajustando a cor se necessário */
+  background-color: #d9534f;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background-color: #c9302c;
+}
+
+/* 🛑 Apenas aplica o Flexbox quando o layout da Sidebar está ativo */
+.app-wrapper.sidebar-layout {
+  /* Garante que a Sidebar e o Content-Area fiquem lado a lado */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+/* O content-area só precisa de existir no layout com a sidebar */
+.content-area {
+  flex-grow: 1;
+  overflow-y: auto;
+  /* Adicione padding/margem se o seu conteúdo precisar de espaço */
+}
+
+/* ================== PROFILE PAGE LAYOUT ================== */
+
+/* Define a largura máxima do conteúdo central */
+.profile-page-container {
+  padding: 0; /* Remove o padding padrão da classe .page */
+  width: 100%;
+}
+
+.profile-header-area {
+  position: relative;
+  width: 100%;
+  margin-bottom: 0; /* Remove a margem, pois o conteúdo vai logo abaixo */
+}
+
+/* Capa: Ocupa a largura total */
+.cover-area {
+  width: 100%;
+  height: 300px; /* Altura da capa */
+  background-size: cover;
+  background-position: center;
+  /* Remover borda arredondada se for usar sidebar, ou manter se for mais estético */
+  border-radius: 0 0 15px 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.profile-img-overlay-pos {
+  position: absolute;
+  bottom: -75px; /* Puxa o centro da foto para a linha inferior da capa (150px/2 = 75px) */
+  left: 10%;
+  z-index: 10;
+}
+
+/* Overlay que contém a foto, nome e quote */
+.profile-info-overlay {
+  position: absolute;
+  bottom: -50px; /* Ajusta a altura da sobreposição */
+  left: 10%; /* Alinha com o padding do GetStarted */
+  right: 10%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end; /* Alinha o conteúdo de nome e quote ao fundo */
+  width: 80%; /* 100% - (10% left + 10% right) */
+}
+
+/* Foto de Perfil (Bate na linha inferior da capa) */
+.profile-img-container {
+  /* Ajusta para bater na linha. O 50px acima é a margem */
+  transform: translateY(25px);
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.profile-photo-lg {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid white; /* Borda branca para destacar */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Detalhes Principais (Nome, Classe, Curso) */
+
+.profile-intro-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Alinha o conteúdo ao topo */
+  gap: 40px;
+
+  /* Margem que puxa o conteúdo para baixo da foto de perfil (150px + espaço) */
+  margin-top: 100px;
+  margin-bottom: 40px;
+
+  /* Força os elementos a terem o tamanho desejado */
+  width: 100%;
+}
+
+.profile-main-details {
+  flex-grow: 1;
+  padding-left: 0; /* Removido padding, agora o margin-left será usado se necessário */
+  margin-bottom: 0;
+}
+.name-and-friends {
+  display: flex;
+  align-items: baseline;
+  gap: 15px;
+}
+
+.profile-name {
+  font-size: 2.5em; /* Nome em destaque */
+  margin: 0;
+  color: #273648;
+}
+
+.friend-count {
+  font-size: 1em;
+  color: #555;
+  font-weight: bold;
+}
+
+.profile-class,
+.profile-course {
+  margin: 5px 0;
+  font-size: 1.1em;
+  color: #555;
+}
+
+/* Citação (Quote) à Direita */
+.profile-quote-box {
+  width: 300px; /* Mantém a largura fixa para a caixa de quote */
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 0; /* Removida margem inferior */
+  flex-shrink: 0;
+}
+
+.profile-quote-box h3 {
+  margin: 0 0 5px 0;
+  font-size: 1em;
+  color: #39616a;
+  border-bottom: 1px dashed #ccc;
+  padding-bottom: 5px;
+}
+
+.quote-text-lg {
+  font-style: italic;
+  margin: 0;
+  font-size: 0.95em;
+  color: #333;
+}
+
+/* ================== CONTEÚDO PRINCIPAL (Main) ================== */
+
+.profile-main-content {
+  /* Alinha o conteúdo principal com a área de capa e foto */
+  padding-left: 10%;
+  padding-right: 10%;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.section-divider {
+  border: 0;
+  height: 1px;
+  background: #e0e0e0;
+  margin: 40px 0;
+}
+
+/* Layout de Duas Colunas (Achievements e Contacto) */
+.main-sections-wrapper {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.profile-section {
+  flex: 1;
+  min-width: 300px;
+}
+
+/* Achievements Grid */
+.achievement-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.achievement-card {
+  background-color: white;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 5px solid #a6d7e2; /* Cor de destaque */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Contacto (Deixado simples por enquanto) */
+.contact-details p {
+  margin: 8px 0;
+  font-size: 0.95em;
+}
+
+/* ================== ASSINATURAS E AMIGOS ================== */
+
+.signatures-friends-wrapper {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.signatures-area {
+  flex: 2; /* Ocupa 2/3 do espaço */
+  min-width: 400px;
+}
+
+.friends-photos-area {
+  flex: 1; /* Ocupa 1/3 do espaço */
+  min-width: 150px;
+}
+
+/* Assinaturas (Messages) */
+.signatures-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.signature-card {
+  background-color: white;
+  border: 1px solid #eee;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.signature-message {
+  font-style: italic;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.signature-sender {
+  text-align: right;
+  font-weight: bold;
+  color: #39616a;
+  margin: 0;
+}
+
+.btn-sign-profile {
+  margin-top: 15px;
+  width: 100%;
+  padding: 10px;
+  background-color: #a6d7e2;
+  color: #273648;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Fotos dos Amigos (Círculos) */
+.friends-photo-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.friend-circle-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ddd;
+  transition: transform 0.2s;
+}
+
+.friend-circle-photo:hover {
+  transform: scale(1.1);
+  border-color: #39616a;
+}
+
 /* ===================== RESPONSIVO ===================== */
 @media (max-width: 900px) {
   .cover-wrapper {
@@ -465,6 +1042,22 @@ input {
 
   input {
     width: 100%;
+  }
+  /* Empilhar Achievements/Contacto */
+  .main-sections-wrapper {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Empilhar Assinaturas/Amigos */
+  .signatures-friends-wrapper {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .profile-section {
+    min-width: 100%;
+    flex: auto;
   }
 }
 
@@ -504,5 +1097,39 @@ input {
 
   .modal-content {
     width: 90%;
+  }
+}
+
+@media (max-width: 650px) {
+  /* Remover a sobreposição complexa do cabeçalho em telas pequenas */
+  .profile-info-overlay {
+    flex-direction: column;
+    align-items: center;
+    position: static; /* Volta para o fluxo normal */
+    padding: 20px;
+    width: 100%;
+  }
+
+  .profile-img-container {
+    transform: translateY(0);
+    margin-top: -75px; /* Puxa a foto para cima da capa */
+  }
+
+  .profile-main-details,
+  .profile-quote-box {
+    padding-left: 0;
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 0;
+  }
+
+  .name-and-friends {
+    justify-content: center;
+  }
+
+  .profile-main-content {
+    padding-left: 5%;
+    padding-right: 5%;
   }
 }

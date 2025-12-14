@@ -24,16 +24,22 @@ export default function GetStarted({ onFinish }) {
 
   // 2. Chama onFinish para mudar o estado da página no App.jsx
   const handleFinish = () => {
-    if (quote.length <= 50) {
-      alert("Yearbook page completed!");
+    if (quote.length > 50) {
+      alert("Quote too long! Max 50 characters.");
+      return;
+    }
+
+    // 🛑 MOCKING: Simula a chamada da API e o tempo de resposta (ex: 1000ms)
+    console.log("Simulando envio dos dados do perfil para a API...");
+
+    setTimeout(() => {
+      alert("Yearbook page completed and saved! Redirecting to your Profile.");
 
       // Chama a função de navegação passada como prop
       if (onFinish) {
         onFinish();
       }
-    } else {
-      alert("Quote too long! Max 50 characters.");
-    }
+    }, 1000); // 1 segundo de latência simulada
   };
 
   // Modal achievements
@@ -42,16 +48,26 @@ export default function GetStarted({ onFinish }) {
   const handleModalSubmit = (e) => {
     e.preventDefault();
     setAchievements([...achievements, newAchievement]);
+    // Reset o estado do novo achievement
     setNewAchievement({ title: "", description: "", image: null });
     setShowModal(false);
   };
 
+  // 🛑 CORREÇÃO FINAL: Atualização Funcional para garantir consistência do estado
   const handleModalChange = (e) => {
     const { name, value, files } = e.target;
+
     if (name === "image") {
-      setNewAchievement({ ...newAchievement, image: files[0] });
+      setNewAchievement((prevAchievement) => ({
+        ...prevAchievement,
+        image: files[0],
+      }));
     } else {
-      setNewAchievement({ ...newAchievement, [name]: value });
+      // Usa a função de callback para garantir que 'prevAchievement' é o estado anterior correto.
+      setNewAchievement((prevAchievement) => ({
+        ...prevAchievement,
+        [name]: value, // Atualiza o campo dinamicamente (title ou description)
+      }));
     }
   };
 
@@ -73,7 +89,7 @@ export default function GetStarted({ onFinish }) {
     placeholder,
     pattern,
     title,
-    // Adicione name, value, onChange para o Modal funcionar corretamente
+    // Props do formulário
     name,
     value,
     onChange,
@@ -86,8 +102,9 @@ export default function GetStarted({ onFinish }) {
         placeholder={`e.g. ${placeholder}`}
         pattern={pattern}
         title={title}
+        // 🛑 CORREÇÃO: Repassar as props de controle do formulário
         name={name}
-        value={value}
+        value={value || ""} // Usa valor ou string vazia para controle
         onChange={onChange}
         required={required}
       />
@@ -167,6 +184,7 @@ export default function GetStarted({ onFinish }) {
             <div className="tab personal">
               <div className="columns-wrapper">
                 <div className="column">
+                  {/* Nota: Estes campos não estão controlados por estado ainda */}
                   <InputField label="First Name:" placeholder="John" />
                   <InputField label="Last Name:" placeholder="Doe" />
                   <InputField
@@ -234,8 +252,18 @@ export default function GetStarted({ onFinish }) {
               <div className="achievements-list">
                 {achievements.map((a, index) => (
                   <div key={index} className="achievement-item">
-                    <strong>{a.title}</strong>
-                    <p>{a.description}</p>
+                    <div className="achievement-text">
+                      <strong>{a.title}</strong>
+                      <p>{a.description}</p>
+                    </div>
+
+                    {a.image && (
+                      <img
+                        src={URL.createObjectURL(a.image)}
+                        alt={a.title}
+                        className="achievement-image"
+                      />
+                    )}
                   </div>
                 ))}
               </div>
@@ -263,7 +291,6 @@ export default function GetStarted({ onFinish }) {
               </div>
 
               {/* No modo Quote, o botão Finish é renderizado separadamente abaixo, se não estiver usando o alinhamento lado a lado */}
-              {/* Eu mantive o seu JSX original (botão renderizado abaixo) */}
             </div>
           )}
         </div>
@@ -287,29 +314,36 @@ export default function GetStarted({ onFinish }) {
           <div className="modal-content">
             <h3>Add Achievement</h3>
             <form onSubmit={handleModalSubmit}>
-              <InputField
-                label="Title"
-                name="title"
-                placeholder="Academic Excellence Award"
-                value={newAchievement.title}
-                onChange={handleModalChange}
+              <label>Title:</label>
+              {/* 🛑 CORREÇÃO: Usar input type="text" para o título */}
+              <input
+                type="text"
+                name="title" // ESSENCIAL para o handleModalChange
+                placeholder="e.g. Academic Excellence Award"
+                value={newAchievement.title} // LIGA AO ESTADO
+                onChange={handleModalChange} // MANIPULA O ESTADO
                 required
               />
-              <label>Description</label>
+
+              <label>Description:</label>
               <textarea
-                name="description"
+                name="description" // ESSENCIAL para o handleModalChange
                 placeholder="e.g. Achieved top grades in the final year of studies."
-                value={newAchievement.description}
-                onChange={handleModalChange}
+                value={newAchievement.description} // LIGA AO ESTADO
+                onChange={handleModalChange} // MANIPULA O ESTADO
                 required
               />
-              <label>Image (Optional)</label>
+
+              {/* 3. INPUT PARA A IMAGEM */}
+              <label>Image (Optional):</label>
               <input
                 type="file"
                 name="image"
                 onChange={handleModalChange}
                 accept="image/*"
               />
+
+              {/* Botões */}
               <div className="modal-buttons">
                 <button type="button" onClick={() => setShowModal(false)}>
                   Cancel
