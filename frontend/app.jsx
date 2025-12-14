@@ -6,8 +6,8 @@ import Register from "./components/Register";
 import GetStarted from "./components/GetStarted";
 
 import Yearbook from "./components/Yearbook";
-import Sidebar from "./components/Sidebar";
-import Profile from "./components/Profile";
+import Sidebar from "./components/sidebar";
+import Profile from "./components/profile";
 // Importe Friends e Settings quando os criar
 
 import "./styles/main.css";
