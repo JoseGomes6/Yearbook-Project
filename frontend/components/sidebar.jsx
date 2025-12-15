@@ -18,9 +18,9 @@ export default function Sidebar({ onNavigate, currentPage }) {
         <button
           className="hamburger-btn"
           onClick={() => setIsExpanded(!isExpanded)}
-          title={isExpanded ? "Recolher Sidebar" : "Expandir Sidebar"}
+          title={isExpanded ? "Close menu" : "Open menu"}
         >
-          {isExpanded ? "☰" : "☰"}
+          {isExpanded ? "x" : "☰"}
         </button>
       </div>
 

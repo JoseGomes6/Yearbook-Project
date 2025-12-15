@@ -593,13 +593,13 @@ input {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 6px;
-  flex-grow: 1; /* Distribui o espaço entre as 3 barras */
+  flex-grow: 1;
 }
 
 /* Grid de Membros (3 Colunas) */
 .members-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 3 colunas de tamanho igual */
+  grid-template-columns: repeat(4, 1fr); /* 3 colunas de tamanho igual */
   gap: 20px;
 }
 
@@ -782,59 +782,49 @@ input {
 /* Ajusta os botões de navegação e logout */
 .app-sidebar.collapsed .sidebar-btn,
 .app-sidebar.collapsed .logout-btn {
-  justify-content: center; /* Centraliza o ícone */
-  padding: 12px 0; /* Padding lateral zero, pois só tem ícone */
-  margin: 8px auto; /* Adiciona margem horizontal para centralizar */
-  width: 50px; /* Largura fixa para o botão, apenas para o ícone */
+  justify-content: center;
+  padding: 12px 0;
+  margin: 8px auto;
+  width: 50px;
 }
 
-/* Remove a margem do ícone para centralização */
 .app-sidebar.collapsed .sidebar-btn .icon,
 .app-sidebar.collapsed .logout-btn .icon {
   margin-right: 0;
 }
 
-/* Esconde o label de todos os botões no estado recolhido */
-/* Nota: Isto é redundante com o {isExpanded && ...} no JSX, mas é uma boa prática CSS. */
 .app-sidebar.collapsed .label {
   display: none;
 }
 
 .app-sidebar.collapsed + .content-area {
-  margin-left: 75px; /* Largura da Sidebar recolhida */
+  margin-left: 75px;
 }
 
-/* 🛑 Apenas aplica o Flexbox quando o layout da Sidebar está ativo */
 .app-wrapper.sidebar-layout {
-  /* Garante que a Sidebar e o Content-Area fiquem lado a lado */
   display: flex;
   flex-direction: row;
   align-items: stretch;
 }
 
-/* O content-area só precisa de existir no layout com a sidebar */
 .content-area {
   flex-grow: 1;
   overflow-y: auto;
   margin-left: 250px;
   padding: 20px;
-  /* Adicione padding/margem se o seu conteúdo precisar de espaço */
 }
 
 /* ================== PROFILE PAGE LAYOUT ================== */
 
-/* 🛑 Apenas aplica o Flexbox quando o layout da Sidebar está ativo */
 .app-wrapper.sidebar-layout {
-  /* Garante que a Sidebar e o Content-Area fiquem lado a lado */
   display: flex;
   flex-direction: row;
   align-items: stretch;
 }
-/* O content-area só precisa de existir no layout com a sidebar */
+
 .content-area {
   flex-grow: 1;
   overflow-y: auto;
-  /* Adicione padding/margem se o seu conteúdo precisar de espaço */
 }
 
 /* Define a largura máxima do conteúdo central */
@@ -1160,6 +1150,68 @@ input {
 .friend-circle-photo:hover {
   transform: scale(1.1);
   border-color: #39616a;
+}
+
+/* Definições para o container de toda a página de Definições */
+.settings-page-container {
+  max-width: 900px; /* Limita a largura para melhor leitura */
+  margin: 0 auto;
+  padding-top: 50px;
+}
+
+.settings-title {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.settings-subtitle {
+  color: #888;
+  margin-bottom: 40px;
+}
+
+.settings-section {
+  background: var(
+    --card-background,
+    #fff
+  ); /* Usa variável para suportar temas */
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+  font-size: 1.5rem;
+  color: var(--text-color, #333);
+  border-bottom: 1px solid var(--border-color, #eee);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.setting-item {
+  padding: 15px 0;
+  border-bottom: 1px dashed var(--border-color, #f0f0f0);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.setting-label {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: var(--text-color, #222);
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.setting-description {
+  color: var(--secondary-text-color, #777);
+  font-size: 0.9rem;
+  width: 70%; /* Dá espaço ao toggle switch */
 }
 
 /* ===================== RESPONSIVO ===================== */

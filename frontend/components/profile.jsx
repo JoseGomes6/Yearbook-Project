@@ -164,7 +164,6 @@ export default function Profile() {
                   <p className="signature-sender">— {sig.sender}</p>
                 </div>
               ))}
-              <button className="btn-sign-profile">Sign John's Profile</button>
             </div>
           </section>
 
