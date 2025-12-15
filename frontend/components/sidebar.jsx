@@ -1,39 +1,48 @@
-// components/Sidebar.jsx
-import React from "react";
+import React, { useState } from "react";
 
-// Recebe a função onNavigate (handleSwitch do App.jsx)
 export default function Sidebar({ onNavigate, currentPage }) {
-  // Lista dos destinos essenciais para um Yearbook
+  const [isExpanded, setIsExpanded] = useState(true);
+
   const destinations = [
     { name: "My Profile", page: "profile", icon: "👤" },
     { name: "Yearbook Search", page: "yearbook", icon: "🔍" },
-    { name: "Friends List", page: "friends", icon: "👥" }, // Novo item: Lista de amigos
-    { name: "Settings", page: "settings", icon: "⚙️" }, // Novo item: Configurações
+    { name: "Friends List", page: "friends", icon: "👥" },
+    { name: "Settings", page: "settings", icon: "⚙️" },
   ];
 
   return (
-    <div className="app-sidebar">
-      <h1 className="sidebar-logo">Yearbook Hub</h1>
+    <div className={`app-sidebar ${isExpanded ? "" : "collapsed"}`}>
+      <div className="sidebar-header">
+        <h1 className="sidebar-logo">Yearbook Hub</h1>
+
+        <button
+          className="hamburger-btn"
+          onClick={() => setIsExpanded(!isExpanded)}
+          title={isExpanded ? "Recolher Sidebar" : "Expandir Sidebar"}
+        >
+          {isExpanded ? "☰" : "☰"}
+        </button>
+      </div>
 
       <nav className="sidebar-nav">
         {destinations.map((item) => (
           <button
             key={item.page}
             onClick={() => onNavigate(item.page)}
-            // Usa a prop currentPage para destacar o link ativo
             className={`sidebar-btn ${
               currentPage === item.page ? "active" : ""
             }`}
           >
             <span className="icon">{item.icon}</span>
-            <span className="label">{item.name}</span>
+            {isExpanded && <span className="label">{item.name}</span>}
           </button>
         ))}
       </nav>
 
       <div className="sidebar-footer">
         <button onClick={() => onNavigate("login")} className="logout-btn">
-          ➡️ Logout
+          <span className="icon">➡️</span>
+          {isExpanded && <span className="label">Logout</span>}
         </button>
       </div>
     </div>

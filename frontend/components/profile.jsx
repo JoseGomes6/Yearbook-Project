@@ -110,27 +110,41 @@ export default function Profile() {
             <div className="achievement-grid">
               {profile.achievements.map((item, index) => (
                 <div key={index} className="achievement-card">
-                  <h4>{item.title}</h4>
-                  <p>{item.description}</p>
+                  {/* 🛑 NOVO: Contentor Flexbox (Texto e Imagem) */}
+                  <div className="achievement-card-content">
+                    {/* Texto à Esquerda */}
+                    <div className="achievement-text-area">
+                      <h4>{item.title}</h4>
+                      <p>{item.description}</p>
+                    </div>
+
+                    {/* Imagem à Direita */}
+                    <img
+                      src="https://i.pravatar.cc/50?img=15" // Imagem mockada para o Achievement
+                      alt="Achievement Icon"
+                      className="achievement-card-img"
+                    />
+                  </div>
                 </div>
               ))}
             </div>
           </section>
 
-          {/* Coluna 2: Informação de Contacto / Badges */}
           <section className="profile-section personal-contact">
             <h2>📞 Contact & Info</h2>
-            {/* ... (renderização de contacto) ... */}
-            <div className="contact-details">
-              <p>
-                <strong>Email:</strong> {profile.email}
-              </p>
-              <p>
-                <strong>Hometown:</strong> {profile.hometown}
-              </p>
-              <p>
-                <strong>Graduation:</strong> {profile.graduationYear}
-              </p>
+
+            <div className="contact-card">
+              <div className="contact-details">
+                <p>
+                  <strong>Email:</strong> {profile.email}
+                </p>
+                <p>
+                  <strong>Hometown:</strong> {profile.hometown}
+                </p>
+                <p>
+                  <strong>Graduation:</strong> {profile.graduationYear}
+                </p>
+              </div>
             </div>
           </section>
         </div>
