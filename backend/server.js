@@ -3,25 +3,22 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import Profile from "./models/profile.js";
-import User from "./models/User.js"; // 🛑 IMPORTAR NOVO MODELO
+import User from "./models/User.js";
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5005;
 const MONGODB_URI = process.env.MONGODB_URI;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Conexão ao MongoDB
 mongoose
   .connect(MONGODB_URI)
   .then(() => {
     console.log("✅ Conectado ao MongoDB Atlas com sucesso!");
 
-    // Iniciar o servidor HTTP
     app.listen(PORT, () => {
       console.log(`🚀 Servidor Express a correr na porta ${PORT}`);
     });

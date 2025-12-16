@@ -1,8 +1,6 @@
 import React from "react";
-// Assuma que 'profile.css' contém os estilos que definimos.
 import "../styles/main.css";
 
-// Dados mockados (simulados) - Mantemos os mesmos dados de mock.
 const mockProfileData = {
   firstName: "John",
   lastName: "Doe",

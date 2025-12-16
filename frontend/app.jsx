@@ -1,37 +1,27 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
-
-// Importações de Layout de Autenticação / Onboarding
 import Login from "./components/Login";
 import Register from "./components/Register";
 import GetStarted from "./components/GetStarted";
-
-// Importações do Layout da Aplicação (Com Sidebar)
 import Yearbook from "./components/Yearbook";
 import Sidebar from "./components/sidebar";
 import Profile from "./components/profile";
 import FriendsList from "./components/friendslist";
 import Settings from "./components/settings";
-
 import "./styles/main.css";
 
 function App() {
   const [page, setPage] = useState("login");
-  // 🛑 NOVO ESTADO: Para guardar o objeto do utilizador (que contém o _id)
   const [loggedInUser, setLoggedInUser] = useState(null);
-
   const handleSwitch = (target) => setPage(target);
-
-  // 🛑 HANDLE REGISTO: Recebe o objeto do utilizador, guarda-o e navega
   const handleRegisterSuccess = (userData) => {
-    setLoggedInUser(userData); // { _id: '...', username: '...' }
+    setLoggedInUser(userData);
     setPage("getstarted");
   };
 
-  // 🛑 HANDLE LOGIN: (Usaremos esta função mais tarde)
   const handleLoginSuccess = (userData) => {
     setLoggedInUser(userData);
-    setPage("getstarted"); // Assume que após o login, ele continua no onboarding se não estiver completo
+    setPage("getstarted");
   };
 
   const handleFinish = () => setPage("yearbook");

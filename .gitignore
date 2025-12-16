@@ -1,0 +1,12 @@
+# Configurações do ambiente
+.env
+
+# Pastas de dependências (geradas pelo npm)
+node_modules/
+
+# Logs e builds do sistema
+npm-debug.log
+yarn-error.log
+
+# Diretórios de build do Frontend (Vite/React)
+dist/

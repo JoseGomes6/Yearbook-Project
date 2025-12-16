@@ -1,15 +1,12 @@
 import React, { useState } from "react";
 import "../styles/main.css";
 
-// 🛑 Novo: Recebe o userId (ID do utilizador) do componente pai.
 export default function GetStarted({ userId, onFinish }) {
   const [activeTab, setActiveTab] = useState("personal");
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  // 🛑 ESTADO UNIFICADO PARA TODOS OS DADOS DO PERFIL
   const [profileData, setProfileData] = useState({
-    // Personal
     firstName: "",
     lastName: "",
     email: "",
@@ -19,16 +16,13 @@ export default function GetStarted({ userId, onFinish }) {
     city: "",
     address: "",
 
-    // Class
     school: "",
     year: "",
     course: "",
     section: "",
 
-    // Achievements
     achievements: [],
 
-    // Quote
     quote: "",
   });
 
@@ -59,7 +53,52 @@ export default function GetStarted({ userId, onFinish }) {
     else if (activeTab === "achievements") setActiveTab("quote");
   };
 
-  // 🛑 LÓGICA DE ENVIO FINAL PARA O BACKEND (Permanece igual)
+  const handleFinish = async () => {
+    // 1. Verificações de Frontend (Mantenha estas)
+    if (profileData.quote.length > 50) {
+      alert("Citação muito longa! Máx. 50 caracteres.");
+      return;
+    }
+
+    setLoading(true);
+
+    // 🛑 ATENÇÃO: Desativamos a verificação do userId para o mock
+    // if (!userId) {
+    //   alert("Erro de autenticação. ID do utilizador não encontrado.");
+    //   setLoading(false);
+    //   return;
+    // }
+
+    // ----------------------------------------------------------------------
+    // 🛑 MOCK: SIMULAÇÃO DA CHAMADA DE BACKEND (Sem fazer o fetch real)
+    // ----------------------------------------------------------------------
+    console.log("SIMULAÇÃO: Enviando dados para o servidor...");
+    console.log("Dados do Perfil:", profileData);
+
+    // Simula um atraso de rede de 1 segundo (como se estivesse a guardar na BD)
+    setTimeout(() => {
+      try {
+        // AQUI O BACKEND RESPONDERIA COM SUCESSO
+        alert(
+          "✅ [MOCK] Perfil concluído e salvo com sucesso! A redirecionar..."
+        );
+
+        // Chamamos a função para avançar a página (para 'yearbook')
+        if (onFinish) {
+          onFinish();
+        }
+      } catch (error) {
+        // Simulação de falha
+        alert("❌ [MOCK] Falha na simulação de salvamento.");
+      } finally {
+        setLoading(false);
+      }
+    }, 1000); // 1000ms = 1 segundo de "carregamento"
+
+    // ----------------------------------------------------------------------
+  };
+  {
+    /*// 🛑 LÓGICA DE ENVIO FINAL PARA O BACKEND (Permanece igual)
   const handleFinish = async () => {
     // 1. Verificações de Frontend
     if (!userId) {
@@ -106,6 +145,9 @@ export default function GetStarted({ userId, onFinish }) {
       setLoading(false);
     }
   };
+
+   */
+  }
 
   // 🛑 Modal Achievements (Lógica de estado corrigida para usar profileData)
   const handleAddAchievement = () => setShowModal(true);
@@ -158,7 +200,6 @@ export default function GetStarted({ userId, onFinish }) {
     placeholder,
     pattern,
     title,
-    // Props de controle do formulário (essenciais)
     name,
     value,
     onChange,
