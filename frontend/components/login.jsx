@@ -52,7 +52,7 @@ export default function Login({ onSwitch, onLoginSuccess }) {
 
   return (
     // 🛑 Envolvemos o conteúdo num <form> e usamos o onSubmit
-    <form className="container" onSubmit={handleSubmit}>
+    <form className="container login-bg" onSubmit={handleSubmit}>
       <h1>Sign In</h1>
 
       {error && <p style={{ color: "red" }}>{error}</p>}

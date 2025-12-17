@@ -70,7 +70,7 @@ export default function Register({ onSwitch, onRegisterSuccess }) {
 
   return (
     // 🛑 Envolvemos o conteúdo num <form> e usamos o onSubmit
-    <form className="container" onSubmit={handleSubmit}>
+    <form className="container register-bg" onSubmit={handleSubmit}>
       <div>
         <h1>Create Account</h1>
         <h3>Fill in your details to get started.</h3>
