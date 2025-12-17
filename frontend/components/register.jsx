@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa"; // npm install react-icons
 
-// 🛑 A função 'onRegister' foi substituída por 'onRegisterSuccess'
-// que deve ser executada se a chamada à API for bem-sucedida.
 export default function Register({ onSwitch, onRegisterSuccess }) {
-  // 1. Estados para capturar os dados do formulário
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,12 +9,10 @@ export default function Register({ onSwitch, onRegisterSuccess }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // 2. Função que lida com o envio do formulário
   const handleSubmit = async (e) => {
     e.preventDefault(); // Impede o recarregamento da página
     setError("");
 
-    // Validação básica frontend
     if (password !== confirmPassword) {
       setError("As passwords não são iguais!");
       return;
@@ -26,38 +21,31 @@ export default function Register({ onSwitch, onRegisterSuccess }) {
     setLoading(true);
 
     try {
-      // 🛑 AQUI: Chamada à rota de Registo do backend
       const response = await fetch("http://localhost:5005/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        // Enviamos apenas o username e a password, pois o backend
-        // no momento só utiliza estes dois campos no modelo User.js
         body: JSON.stringify({
           username: username,
           password: password,
-          email: email, // Podemos enviar o email, mas o backend não o guarda ainda.
+          email: email,
         }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        // Se o registo for bem-sucedido (código 201 Created)
         alert(
           `Conta criada com sucesso para ${data.username}! Agora preencha o seu perfil.`
         );
 
-        // 🛑 1. CHAMA PRIMEIRO: Chama a função que armazena o ID no App.jsx
         if (onRegisterSuccess) {
           onRegisterSuccess(data); // <-- ISTO GUARDA o ID no estado 'loggedInUser'
         }
 
-        // 🛑 2. REDIRECIONA DEPOIS: Só navega DEPOIS de o ID estar guardado
         onSwitch("getstarted");
       } else {
-        // Erro vindo do backend (ex: Username já existe - 400 Bad Request)
         setError(data.message || "Erro no registo. Tente outro Username.");
       }
     } catch (err) {
@@ -69,17 +57,14 @@ export default function Register({ onSwitch, onRegisterSuccess }) {
   };
 
   return (
-    // 🛑 Envolvemos o conteúdo num <form> e usamos o onSubmit
     <form className="container register-bg" onSubmit={handleSubmit}>
       <div>
         <h1>Create Account</h1>
         <h3>Fill in your details to get started.</h3>
       </div>
 
-      {/* Exibe erros (validação frontend ou backend) */}
       {error && <p style={{ color: "red", margin: "10px 0" }}>{error}</p>}
 
-      {/* 🛑 Username */}
       <div className="input-wrapper">
         <FaUser className="input-icon" />
         <input
@@ -91,7 +76,6 @@ export default function Register({ onSwitch, onRegisterSuccess }) {
         />
       </div>
 
-      {/* 🛑 Email */}
       <div className="input-wrapper">
         <FaEnvelope className="input-icon" />
         <input
@@ -102,7 +86,6 @@ export default function Register({ onSwitch, onRegisterSuccess }) {
         />
       </div>
 
-      {/* 🛑 Password */}
       <div className="input-wrapper">
         <FaLock className="input-icon" />
         <input
@@ -114,7 +97,6 @@ export default function Register({ onSwitch, onRegisterSuccess }) {
         />
       </div>
 
-      {/* 🛑 Confirm Password */}
       <div className="input-wrapper">
         <FaLock className="input-icon" />
         <input

@@ -49,13 +49,16 @@ function App() {
           />
         )}
 
-        <div className="auth-image-side">
-          <img
-            src="/BackgroundPhoto.jpg"
-            alt="Yearbook Background"
-            className="auth-bg-image"
-          />
-        </div>
+        {/* A imagem agora só aparece se NÃO for getstarted */}
+        {page !== "getstarted" && (
+          <div className="auth-image-side">
+            <img
+              src="/BackgroundPhoto.jpg"
+              alt="Yearbook Background"
+              className="auth-bg-image"
+            />
+          </div>
+        )}
       </div>
     );
   }

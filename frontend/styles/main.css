@@ -15,7 +15,7 @@ body {
 .app-wrapper {
   position: relative;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0;
   padding: 0;
   overflow: hidden;
@@ -62,15 +62,15 @@ body {
   position: absolute;
   top: 0;
   right: 0;
-  width: 100vw; /* LARGURA TOTAL */
-  height: 100vh; /* ALTURA TOTAL */
-  z-index: 1; /* Valor baixo para ficar atrás */
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
 }
 
 .auth-bg-image {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* ESTA É A CHAVE */
+  object-fit: cover;
   object-position: center;
   display: block;
 }
@@ -173,21 +173,24 @@ button:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-left: 10%;
-  padding-right: 10%;
   width: 100%;
-  padding-bottom: 150px;
   height: auto;
+  padding-bottom: 100px;
 }
 
-.getstarted-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.get-started-container {
+  position: relative;
+  z-index: 10;
   width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 50px;
+  background: #f4f7f6;
+  min-height: 100vh;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  color: #333;
 }
 
-/* Header: título e subtítulo */
 .getstarted-header {
   width: 100%;
   text-align: left;
@@ -204,7 +207,6 @@ button:hover {
   color: #666;
 }
 
-/* Cover full-width */
 .cover-wrapper {
   position: relative;
   width: 100%;
@@ -213,8 +215,9 @@ button:hover {
 }
 
 .cover-upload {
-  width: 100%;
+  width: 97%;
   height: 100%;
+  margin-left: 20px;
   background: #3a4a5a;
   display: flex;
   justify-content: center;
@@ -235,7 +238,6 @@ button:hover {
   align-items: center;
 }
 
-/* Profile photo sobreposta */
 .profile-upload {
   width: 150px;
   height: 150px;
@@ -253,29 +255,28 @@ button:hover {
   font-size: 18px;
 }
 
-/* Conteúdo abaixo da cover */
 .getstarted-main {
   width: 100%;
   padding: 0 5%;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* alinhado à esquerda */
+  align-items: flex-start;
   gap: 0px;
 }
 
-/* Tabs */
 .tabs {
   display: flex;
   gap: 30px;
   border-bottom: 2px solid #ccc;
   margin-bottom: 20px;
   justify-content: center;
-  width: 100%;
+  width: 60%;
+  margin-left: 100px;
 }
 
 .tab-btn {
-  background: none; /* sem fundo */
-  border: none; /* sem borda */
+  background: none;
+  border: none;
   padding: 10px 15px;
   font-size: 16px;
   cursor: pointer;
@@ -306,11 +307,11 @@ button:hover {
   border-radius: 2px;
 }
 
-/* Colunas de inputs */
 .tab-content {
   display: flex;
   justify-content: flex-start;
   width: 100%;
+  margin-left: 100px;
 }
 
 .columns-wrapper {
@@ -354,6 +355,7 @@ input {
   max-width: 250px; /* mantém largura igual aos inputs */
   align-self: flex-start; /* alinhado à esquerda */
   box-sizing: border-box;
+  margin-left: 100px;
 }
 
 .btn-continue:hover {
