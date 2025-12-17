@@ -12,12 +12,9 @@ export default function Login({ onSwitch, onLoginSuccess }) {
 
   // 2. Função para lidar com o envio do formulário
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Impede o recarregamento da página
+    e.preventDefault();
     setError("");
     setLoading(true);
-
-    // 🛑 Nota: No seu backend, você precisará de uma rota /api/login para autenticação.
-    // Assumimos que o endpoint é 'http://localhost:5000/api/auth/login'
 
     try {
       const response = await fetch("http://localhost:5005/api/auth/login", {
@@ -26,20 +23,24 @@ export default function Login({ onSwitch, onLoginSuccess }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username: username, // Envia o estado capturado
-          password: password, // Envia o estado capturado
+          username: username,
+          password: password,
         }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        // Se o login for bem-sucedido (o backend devolve um token/user object)
-        // 💡 Chama a função de sucesso que deve estar na sua App principal
-        onLoginSuccess(data.token, data.user);
+        // ✅ 1. IMPORTANTE: Guardar o ID no localStorage para o Profile.jsx conseguir ler
+        // O teu backend envia o ID como _id
+        localStorage.setItem("userId", data._id);
+
+        // ✅ 2. CORREÇÃO: Passar os dados certos para a App.js
+        // No teu backend não tens 'data.user', tens os dados diretamente no 'data'
+        onLoginSuccess(data);
+
         alert("Login bem-sucedido!");
       } else {
-        // Se houver erro de autenticação (401 Unauthorized, 400 Bad Request)
         setError(data.message || "Credenciais inválidas. Tente novamente.");
       }
     } catch (err) {

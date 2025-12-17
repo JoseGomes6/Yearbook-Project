@@ -550,6 +550,98 @@ input {
   border-radius: 10px;
 }
 
+.member-card.clickable {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.member-card.clickable:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.request-card {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.request-photo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
+}
+
+.request-info {
+  flex-grow: 1;
+}
+
+.btn-accept {
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.btn-decline {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+/* Container para alinhar os elementos */
+.friendship-status-container {
+  margin-top: 10px;
+}
+
+/* Base para os Badges (Friends e Pendente) */
+.badge-status {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  display: inline-block;
+}
+
+/* VERDE: Se já forem amigos */
+.badge-status.friends {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #2e7d32;
+}
+
+/* AMARELO: Se estiver pendente */
+.badge-status.pending {
+  background-color: #fffde7;
+  color: #f57f17;
+  border: 1px solid #f57f17;
+}
+
+/* AZUL: Botão de Adicionar (Teu botão original) */
+.btn-add-friend {
+  background-color: #007bff; /* Azul */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-add-friend:hover {
+  background-color: #0056b3;
+}
 /* --------------- Animação de Finalização --------------- */
 
 .finish-animation-overlay {

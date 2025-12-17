@@ -1,15 +1,14 @@
 // backend/models/User.js
 
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs"; // Importa o bcrypt
+import bcrypt from "bcryptjs";
 
 const UserSchema = new mongoose.Schema(
   {
     username: { type: String, required: true, unique: true, trim: true },
     password: { type: String, required: true },
-    email: { type: String }, // Adiciona o email aqui para o registo funcionar
+    email: { type: String },
 
-    // --- CAMPOS DO PERFIL (Adicionados para o GetStarted) ---
     firstName: { type: String, default: "" },
     lastName: { type: String, default: "" },
     phone: { type: String, default: "" },
@@ -23,28 +22,32 @@ const UserSchema = new mongoose.Schema(
     course: { type: String, default: "" },
     section: { type: String, default: "" },
 
-    achievements: { type: Array, default: [] }, // Array de objetos {title, description, image}
+    achievements: { type: Array, default: [] },
     quote: { type: String, default: "" },
 
-    coverPhoto: { type: String, default: "" }, // URL ou Path da imagem
-    profilePhoto: { type: String, default: "" }, // URL ou Path da imagem
+    coverPhoto: { type: String, default: "" },
+    profilePhoto: { type: String, default: "" },
+
+    // --- 🚩 NOVOS CAMPOS ADICIONADOS AQUI ---
+    // Guarda o ID dos amigos confirmados
+    friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+
+    // Guarda o ID de quem te enviou pedidos (pendentes)
+    friendRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    // ----------------------------------------
   },
   { timestamps: true }
 );
 
-// Middleware para encriptar a password antes de guardar
+// ... (Resto do teu código: Middleware pre-save e matchPassword) ...
+
 UserSchema.pre("save", async function (next) {
-  // Se a password não foi modificada, avança
-  if (!this.isModified("password")) {
-    return next();
-  }
-  // Cria o hash da password com um salt de 10
+  if (!this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
 
-// Método para comparar a password no login
 UserSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };

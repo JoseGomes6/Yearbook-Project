@@ -104,16 +104,19 @@ app.put("/api/profile/:userId", async (req, res) => {
   }
 });
 
-// 4. OBTER Perfil (GET) - Usado pelo Profile.jsx
-// ESTA ROTA É ESSENCIAL PARA O TEU PROFILE.JSX FUNCIONAR
+// 4. OBTER Perfil (GET) - Agora com Populate para mostrar amigos reais
 app.get("/api/profile/:userId", async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId).select("-password"); // Remove a password por segurança
+    const user = await User.findById(req.params.userId)
+      .select("-password") // Segurança: não envia a password
+      .populate("friends", "firstName lastName profilePhoto"); // 🔥 TROCA IDs POR DADOS REAIS
+
     if (!user) {
       return res.status(404).json({ message: "Perfil não encontrado." });
     }
     res.json(user);
   } catch (error) {
+    console.error("Erro ao carregar perfil:", error);
     res.status(500).json({ message: "Erro ao carregar perfil." });
   }
 });
@@ -122,10 +125,73 @@ app.get("/api/profile/:userId", async (req, res) => {
 app.get("/api/yearbook/profiles", async (req, res) => {
   try {
     const users = await User.find({ firstName: { $exists: true } }).select(
-      "username firstName lastName profilePhoto course"
+      "username firstName lastName profilePhoto school course"
     );
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: "Erro ao listar perfis." });
+  }
+});
+
+// 1. Enviar Pedido (COM VALIDAÇÃO)
+app.post("/api/friends/request/:targetId", async (req, res) => {
+  const { senderId } = req.body;
+  const { targetId } = req.params;
+
+  try {
+    const target = await User.findById(targetId);
+    const sender = await User.findById(senderId);
+
+    // Validação A: Já são amigos?
+    if (target.friends.includes(senderId)) {
+      return res.status(400).json({ message: "Vocês já são amigos!" });
+    }
+
+    // Validação B: Já existe um pedido pendente?
+    if (target.friendRequests.includes(senderId)) {
+      return res.status(400).json({ message: "Pedido já enviado e pendente." });
+    }
+
+    // Usa $addToSet para segurança extra contra duplicados
+    await User.findByIdAndUpdate(targetId, {
+      $addToSet: { friendRequests: senderId },
+    });
+
+    res.json({ message: "Pedido enviado!" });
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao processar pedido." });
+  }
+});
+
+// 2. Aceitar Pedido
+app.post("/api/friends/accept", async (req, res) => {
+  const { userId, friendId } = req.body;
+  const user = await User.findById(userId);
+  const friend = await User.findById(friendId);
+
+  // Adicionar aos amigos de ambos
+  user.friends.push(friendId);
+  friend.friends.push(userId);
+
+  // Remover dos pedidos pendentes
+  user.friendRequests = user.friendRequests.filter(
+    (id) => id.toString() !== friendId
+  );
+
+  await user.save();
+  await friend.save();
+  res.json({ message: "Agora são amigos!" });
+});
+
+app.get("/api/friends/requests/:userId", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId).populate(
+      "friendRequests",
+      "firstName lastName profilePhoto school"
+    );
+
+    res.json(user.friendRequests);
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao carregar pedidos." });
   }
 });

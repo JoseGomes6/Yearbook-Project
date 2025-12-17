@@ -1,34 +1,35 @@
 import React, { useState, useEffect } from "react";
 import "../styles/main.css";
 
-export default function Profile({ userId }) {
-  // 1. Estado para guardar os dados que vêm da BD
+export default function Profile({ userId, onViewProfile }) {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 2. Procurar os dados no Backend ao carregar a página
   useEffect(() => {
     const fetchProfile = async () => {
+      const id = userId || localStorage.getItem("userId");
+
+      console.log("DEBUG: ID detetado no Profile:", id);
+
+      if (!id || id === "undefined" || id === "null") {
+        console.error("ERRO: Nenhum ID encontrado!");
+        setLoading(false);
+        return;
+      }
+
       try {
-        // Se não houver userId via props, tenta ir buscar ao localStorage
-        const id = userId || localStorage.getItem("userId");
-
-        if (!id) {
-          console.error("ID do utilizador não encontrado");
-          setLoading(false);
-          return;
-        }
-
+        setLoading(true);
         const response = await fetch(`http://localhost:5005/api/profile/${id}`);
-        const data = await response.json();
 
-        if (response.ok) {
-          setProfile(data);
-        } else {
-          console.error("Erro ao procurar perfil:", data.message);
+        if (!response.ok) {
+          throw new Error("Perfil não encontrado no servidor");
         }
+
+        const data = await response.json();
+        setProfile(data);
       } catch (error) {
-        console.error("Erro de conexão:", error);
+        console.error("Erro no fetch:", error);
+        setProfile(null);
       } finally {
         setLoading(false);
       }
@@ -37,16 +38,25 @@ export default function Profile({ userId }) {
     fetchProfile();
   }, [userId]);
 
-  // Enquanto carrega, mostra uma mensagem simples
   if (loading)
     return <div className="loading">A carregar o teu Yearbook...</div>;
 
-  // Se não encontrar perfil (ex: ainda não preencheu o GetStarted)
-  if (!profile) return <div className="error">Perfil não encontrado.</div>;
-
+  if (!profile) {
+    return (
+      <div className="error-container">
+        <h2>Perfil não encontrado</h2>
+        <p>
+          O ID do utilizador é:{" "}
+          {userId || localStorage.getItem("userId") || "Nulo"}
+        </p>
+        <button onClick={() => window.location.reload()}>
+          Recarregar Página
+        </button>
+      </div>
+    );
+  }
   return (
     <div className="page profile-page-container">
-      {/* 1. HEADER (Capa e Foto reais da BD) */}
       <header className="profile-header-area">
         <div
           className="cover-area"
@@ -98,7 +108,6 @@ export default function Profile({ userId }) {
         <hr className="section-divider" />
 
         <div className="main-sections-wrapper">
-          {/* Coluna 1: Achievements Reais */}
           <section className="profile-section achievements-list-display">
             <h2>🏆 Achievements</h2>
             <div className="achievement-grid">
@@ -110,7 +119,6 @@ export default function Profile({ userId }) {
                         <h4>{item.title}</h4>
                         <p>{item.description}</p>
                       </div>
-                      {/* Se o achievement tiver imagem guardada */}
                       {item.image && (
                         <img
                           src={item.image}
@@ -163,22 +171,35 @@ export default function Profile({ userId }) {
                   <p className="signature-message">"{sig.message}"</p>
                   <p className="signature-sender">— {sig.sender}</p>
                 </div>
-              )) || <p>No messages yet. Be the first to sign!</p>}
+              )) || <p>No messages yet.</p>}
             </div>
           </section>
 
           <section className="profile-section friends-photos-area">
             <h2>👥 Friends ({profile.friends?.length || 0})</h2>
             <div className="friends-photo-grid">
-              {profile.friends?.map((friend) => (
-                <div key={friend.id} className="friend-circle-container">
-                  <img
-                    src={friend.photo}
-                    alt={friend.name}
-                    className="friend-circle-photo"
-                  />
-                </div>
-              )) || <p>Looking for friends...</p>}
+              {profile.friends && profile.friends.length > 0 ? (
+                profile.friends.map((friend) => (
+                  <div
+                    key={friend._id}
+                    className="friend-circle-container"
+                    title={friend.firstName}
+                  >
+                    <img
+                      src={
+                        friend.profilePhoto || "https://via.placeholder.com/150"
+                      }
+                      alt={friend.firstName}
+                      className="friend-circle-photo"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => onViewProfile(friend._id)} // Agora funciona!
+                    />
+                    <p className="friend-small-name">{friend.firstName}</p>
+                  </div>
+                ))
+              ) : (
+                <p>Looking for friends...</p>
+              )}
             </div>
           </section>
         </div>

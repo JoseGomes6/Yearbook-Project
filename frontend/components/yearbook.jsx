@@ -1,148 +1,181 @@
-import React, { useState } from "react";
-import "../styles/main.css";
+import React, { useState, useEffect } from "react";
 import "../styles/main.css";
 
-const mockMembers = [
-  {
-    id: 1,
-    name: "Alice Smith",
-    school: "ULisboa",
-    academicLevel: "MSc Computer Science",
-    photo: "https://i.pravatar.cc/150?img=1",
-  },
-  {
-    id: 2,
-    name: "Bob Johnson",
-    school: "FEUP",
-    academicLevel: "BEng Electrical Eng.",
-    photo: "https://i.pravatar.cc/150?img=2",
-  },
-  {
-    id: 3,
-    name: "Carlos Gomes",
-    school: "ULisboa",
-    academicLevel: "BSc Management",
-    photo: "https://i.pravatar.cc/150?img=3",
-  },
-  {
-    id: 4,
-    name: "Diana Pires",
-    school: "FEUP",
-    academicLevel: "MSc Mechanical Eng.",
-    photo: "https://i.pravatar.cc/150?img=4",
-  },
-  {
-    id: 5,
-    name: "Eva Mendes",
-    school: "ULisboa",
-    academicLevel: "PhD Physics",
-    photo: "https://i.pravatar.cc/150?img=5",
-  },
-  {
-    id: 6,
-    name: "Filipe Cruz",
-    school: "FEUP",
-    academicLevel: "BSc Architecture",
-    photo: "https://i.pravatar.cc/150?img=6",
-  },
-];
-
-export default function Yearbook() {
+export default function Yearbook({ userId, onViewProfile, loggedInUser }) {
+  const [members, setMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterSchool, setFilterSchool] = useState("");
   const [filterYear, setFilterYear] = useState("");
 
-  // Lógica simples de filtragem (A ser aprimorada com o backend)
-  const filteredMembers = mockMembers.filter((member) => {
-    const nameMatch = member.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const schoolMatch = filterSchool ? member.school === filterSchool : true;
-    // Simular filtro por ano, se tivéssemos essa propriedade
-    const yearMatch = filterYear
-      ? member.academicLevel.includes(filterYear)
-      : true;
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:5005/api/yearbook/profiles"
+        );
+        const data = await response.json();
+        if (response.ok) {
+          setMembers(data);
+        }
+      } catch (error) {
+        console.error("Erro de conexão:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMembers();
+  }, []);
 
-    return nameMatch && schoolMatch && yearMatch;
+  // 1. FUNÇÃO ATUALIZADA: Agora atualiza o estado local para o botão mudar na hora
+  const addFriend = async (targetId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5005/api/friends/request/${targetId}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ senderId: userId }),
+        }
+      );
+
+      if (response.ok) {
+        alert("Pedido de amizade enviado!");
+
+        // Atualiza a lista de membros localmente para incluir o teu ID nos pedidos dele
+        // Isso faz o botão mudar para "Pendente" sem precisar de refresh
+        setMembers((prevMembers) =>
+          prevMembers.map((m) =>
+            m._id === targetId
+              ? { ...m, friendRequests: [...(m.friendRequests || []), userId] }
+              : m
+          )
+        );
+      } else {
+        const errorData = await response.json();
+        alert("Erro: " + errorData.message);
+      }
+    } catch (error) {
+      console.error("Erro ao enviar pedido:", error);
+      alert("Erro ao conectar ao servidor.");
+    }
+  };
+
+  // 2. NOVA LÓGICA DE ESTADO: Verifica se é Amigo, se está Pendente ou nada
+  const getFriendshipStatus = (member) => {
+    // Se o ID dele está na tua lista de amigos
+    if (loggedInUser?.friends?.includes(member._id)) return "FRIENDS";
+
+    // Se o teu ID está na lista de pedidos dele
+    if (member.friendRequests?.includes(userId)) return "PENDING";
+
+    return "NONE";
+  };
+
+  const filteredMembers = members.filter((member) => {
+    const fullName = `${member.firstName || ""} ${
+      member.lastName || ""
+    }`.toLowerCase();
+    const nameMatch = fullName.includes(searchTerm.toLowerCase());
+    const schoolMatch = filterSchool ? member.school === filterSchool : true;
+    const levelMatch = filterYear
+      ? member.course?.includes(filterYear) || member.year?.includes(filterYear)
+      : true;
+    return nameMatch && schoolMatch && levelMatch;
   });
 
-  const schools = [...new Set(mockMembers.map((m) => m.school))];
+  const schools = [...new Set(members.map((m) => m.school).filter(Boolean))];
+
+  if (loading) return <div className="loading">Loading yearbook...</div>;
 
   return (
     <div className="page yearbook-page-container">
-      <h1 className="yearbook-title">Search for Members</h1>
+      <h1 className="yearbook-title">Search for members</h1>
 
-      {/* Seção de Filtros */}
       <div className="yearbook-filters">
-        {/* 1. Pesquisar por Nome */}
         <input
           type="text"
           placeholder="Search by Name..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-
-        {/* 2. Filtrar por Escola */}
         <select
           value={filterSchool}
           onChange={(e) => setFilterSchool(e.target.value)}
         >
-          <option value="">Filter by School (All)</option>
+          <option value="">All Schools</option>
           {schools.map((school) => (
             <option key={school} value={school}>
               {school}
             </option>
           ))}
         </select>
-
-        {/* 3. Filtrar por Ano/Nível (Simulação) */}
         <select
           value={filterYear}
           onChange={(e) => setFilterYear(e.target.value)}
         >
-          <option value="">Filter by Year/Level (All)</option>
-          <option value="BSc">BSc</option>
-          <option value="MSc">MSc</option>
+          <option value="">All Levels</option>
+          <option value="BSc">BSc / Undergraduate</option>
+          <option value="MSc">MSc / Master</option>
           <option value="PhD">PhD</option>
         </select>
       </div>
 
-      {/* Lista de Membros (Três Colunas) */}
       <div className="members-grid">
-        {filteredMembers.map((member) => (
-          <div key={member.id} className="member-card">
-            {/* Conteúdo do Retângulo */}
-            <div className="member-info-left">
-              {/* Foto Redonda à Esquerda */}
-              <img
-                src={member.photo}
-                alt={member.name}
-                className="member-photo"
-              />
+        {filteredMembers.map((member) => {
+          const status = getFriendshipStatus(member); // Calcula o status uma vez por membro
+
+          return (
+            <div
+              key={member._id}
+              className="member-card clickable"
+              onClick={() => onViewProfile(member._id)}
+            >
+              <div className="member-info-left">
+                <img
+                  src={member.profilePhoto || "https://via.placeholder.com/150"}
+                  alt={member.firstName}
+                  className="member-photo"
+                />
+              </div>
+
+              <div className="member-info-right">
+                <h4 className="member-name">
+                  {member.firstName} {member.lastName}
+                </h4>
+                <p className="member-detail">
+                  <span className="detail-label">School:</span>{" "}
+                  {member.school || "N/A"}
+                </p>
+                <p className="member-detail">
+                  <span className="detail-label">Course:</span>{" "}
+                  {member.course || "N/A"}
+                </p>
+
+                {/* Lógica de Amizade: Só uma destas opções será renderizada */}
+                {member._id !== userId && (
+                  <div className="friendship-status-container">
+                    {status === "FRIENDS" ? (
+                      <span className="badge-status friends">✅ Friends</span>
+                    ) : status === "PENDING" ? (
+                      <span className="badge-status pending">⏳ Pendente</span>
+                    ) : (
+                      <button
+                        className="btn-add-friend"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addFriend(member._id);
+                        }}
+                      >
+                        + Add Friend
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
-
-            <div className="member-info-right">
-              {/* Nome (Maior) */}
-              <h4 className="member-name">{member.name}</h4>
-
-              {/* School e Academic Level */}
-              <p className="member-detail">
-                <span className="detail-label">School:</span> {member.school}
-              </p>
-              <p className="member-detail">
-                <span className="detail-label">Level:</span>{" "}
-                {member.academicLevel}
-              </p>
-
-              {/* Botão Adicionar Amigo (Canto Inferior Direito) */}
-              <button className="btn-add-friend">+ Add Friend</button>
-            </div>
-          </div>
-        ))}
-
-        {filteredMembers.length === 0 && (
-          <p className="no-results">No members found matching your criteria.</p>
-        )}
+          );
+        })}
       </div>
     </div>
   );
