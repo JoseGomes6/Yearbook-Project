@@ -5,22 +5,29 @@ import bcrypt from "bcryptjs"; // Importa o bcrypt
 
 const UserSchema = new mongoose.Schema(
   {
-    username: {
-      type: String,
-      required: true,
-      unique: true, // Garante que não há nomes de utilizador duplicados
-      trim: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    // Opcional: Liga o perfil ao utilizador (para mais tarde)
-    profileId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Profile", // Referencia o modelo Profile que já tem
-      required: false,
-    },
+    username: { type: String, required: true, unique: true, trim: true },
+    password: { type: String, required: true },
+    email: { type: String }, // Adiciona o email aqui para o registo funcionar
+
+    // --- CAMPOS DO PERFIL (Adicionados para o GetStarted) ---
+    firstName: { type: String, default: "" },
+    lastName: { type: String, default: "" },
+    phone: { type: String, default: "" },
+    dateOfBirth: { type: String, default: "" },
+    hometown: { type: String, default: "" },
+    city: { type: String, default: "" },
+    address: { type: String, default: "" },
+
+    school: { type: String, default: "" },
+    year: { type: String, default: "" },
+    course: { type: String, default: "" },
+    section: { type: String, default: "" },
+
+    achievements: { type: Array, default: [] }, // Array de objetos {title, description, image}
+    quote: { type: String, default: "" },
+
+    coverPhoto: { type: String, default: "" }, // URL ou Path da imagem
+    profilePhoto: { type: String, default: "" }, // URL ou Path da imagem
   },
   { timestamps: true }
 );

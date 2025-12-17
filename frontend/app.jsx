@@ -16,7 +16,7 @@ function App() {
   const handleSwitch = (target) => setPage(target);
   const handleRegisterSuccess = (userData) => {
     setLoggedInUser(userData);
-    setPage("yearbook");
+    setPage("getstarted");
   };
 
   const handleLoginSuccess = (userData) => {
@@ -32,7 +32,6 @@ function App() {
   if (!isApplicationLayout) {
     return (
       <div className="app-wrapper">
-        {/* Componentes de Autenticação */}
         {page === "login" && (
           <Login onSwitch={handleSwitch} onLoginSuccess={handleLoginSuccess} />
         )}
@@ -48,8 +47,8 @@ function App() {
             onFinish={handleFinish}
           />
         )}
+        {page === "profile" && <Profile userId={loggedInUser?._id} />}
 
-        {/* A imagem agora só aparece se NÃO for getstarted */}
         {page !== "getstarted" && (
           <div className="auth-image-side">
             <img

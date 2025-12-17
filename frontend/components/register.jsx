@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaUser, FaEnvelope, FaLock } from "react-icons/fa"; // npm install react-icons
+import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 
 export default function Register({ onSwitch, onRegisterSuccess }) {
   const [username, setUsername] = useState("");
@@ -10,7 +10,7 @@ export default function Register({ onSwitch, onRegisterSuccess }) {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Impede o recarregamento da página
+    e.preventDefault();
     setError("");
 
     if (password !== confirmPassword) {
@@ -27,21 +27,20 @@ export default function Register({ onSwitch, onRegisterSuccess }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username: username,
-          password: password,
-          email: email,
+          username,
+          password,
+          email,
         }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        alert(
-          `Conta criada com sucesso para ${data.username}! Agora preencha o seu perfil.`
-        );
+        alert(`Conta criada com sucesso para ${data.username}!`);
 
+        // Passamos os dados (incluindo o _id gerado pelo MongoDB) para o App.jsx
         if (onRegisterSuccess) {
-          onRegisterSuccess(data); // <-- ISTO GUARDA o ID no estado 'loggedInUser'
+          onRegisterSuccess(data);
         }
 
         onSwitch("getstarted");
@@ -57,68 +56,71 @@ export default function Register({ onSwitch, onRegisterSuccess }) {
   };
 
   return (
-    <form className="container register-bg" onSubmit={handleSubmit}>
-      <div>
-        <h1>Create Account</h1>
-        <h3>Fill in your details to get started.</h3>
+    <div className="container-wrapper">
+      <div className="container register-bg">
+        <form className="auth-form-content" onSubmit={handleSubmit}>
+          <div>
+            <h1>Create Account</h1>
+            <h3>Fill in your details to get started.</h3>
+          </div>
+
+          {error && <p style={{ color: "red", margin: "10px 0" }}>{error}</p>}
+
+          <div className="input-wrapper">
+            <FaUser className="input-icon" />
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="input-wrapper">
+            <FaEnvelope className="input-icon" />
+            <input
+              type="email"
+              placeholder="Email (Opcional)"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+
+          <div className="input-wrapper">
+            <FaLock className="input-icon" />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="input-wrapper">
+            <FaLock className="input-icon" />
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <button type="submit" disabled={loading}>
+            {loading ? "A Registar..." : "Get Started"}
+          </button>
+
+          <p className="auth-footer-text">
+            Already have an account?{" "}
+            <span className="link-text" onClick={() => onSwitch("login")}>
+              Sign In
+            </span>
+          </p>
+        </form>
       </div>
-
-      {error && <p style={{ color: "red", margin: "10px 0" }}>{error}</p>}
-
-      <div className="input-wrapper">
-        <FaUser className="input-icon" />
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-      </div>
-
-      <div className="input-wrapper">
-        <FaEnvelope className="input-icon" />
-        <input
-          type="email"
-          placeholder="Email (Opcional)"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </div>
-
-      <div className="input-wrapper">
-        <FaLock className="input-icon" />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </div>
-
-      <div className="input-wrapper">
-        <FaLock className="input-icon" />
-        <input
-          type="password"
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-        />
-      </div>
-
-      {/* O botão faz o submit do formulário */}
-      <button type="submit" disabled={loading}>
-        {loading ? "A Registar..." : "Get Started"}
-      </button>
-
-      <p style={{ textAlign: "left", marginTop: "65px" }}>
-        Already have an account?{" "}
-        <span className="link-text" onClick={() => onSwitch("login")}>
-          Sign In
-        </span>
-      </p>
-    </form>
+    </div>
   );
 }

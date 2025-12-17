@@ -2,8 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import Profile from "./models/profile.js";
-import User from "./models/User.js";
+import User from "./models/User.js"; // Garante que o caminho está correto
 
 dotenv.config();
 
@@ -11,14 +10,15 @@ const app = express();
 const PORT = process.env.PORT || 5005;
 const MONGODB_URI = process.env.MONGODB_URI;
 
+// Configuração de CORS e Limite de JSON (Aumentado para suportar fotos em Base64)
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 mongoose
   .connect(MONGODB_URI)
   .then(() => {
     console.log("✅ Conectado ao MongoDB Atlas com sucesso!");
-
     app.listen(PORT, () => {
       console.log(`🚀 Servidor Express a correr na porta ${PORT}`);
     });
@@ -27,36 +27,28 @@ mongoose
     console.error("❌ Erro na conexão com o MongoDB:", err.message);
   });
 
-// ... Rotas de Teste e Perfil (GET/POST) ...
-// (Mantenha as rotas que já tinha: "/", "/api/yearbook/profiles", "/api/yearbook/add-profile")
-
 // ==========================================================
-// 🔑 ROTAS DE AUTENTICAÇÃO (Registo e Login REAL)
+// 🔑 ROTAS DE AUTENTICAÇÃO
 // ==========================================================
 
-// Rota 3. Rota de Registo (Para criar a conta na BD)
+// 1. Registo
 app.post("/api/auth/register", async (req, res) => {
-  const { username, password } = req.body;
-
+  const { username, password, email } = req.body;
   try {
     const userExists = await User.findOne({ username });
-
     if (userExists) {
       return res.status(400).json({ message: "Nome de utilizador já existe." });
     }
 
-    // Cria o utilizador (a password é automaticamente hashada no modelo User.js)
-    const user = await User.create({ username, password });
+    const user = await User.create({ username, password, email });
 
     if (user) {
-      // Em produção, enviaria um token (JWT) aqui
       res.status(201).json({
         _id: user._id,
         username: user.username,
+        email: user.email,
         message: "Utilizador registado com sucesso.",
       });
-    } else {
-      res.status(400).json({ message: "Dados inválidos." });
     }
   } catch (error) {
     res
@@ -65,25 +57,18 @@ app.post("/api/auth/register", async (req, res) => {
   }
 });
 
-// Rota 4. Rota de Login (Procurar o nome e verificar a password na BD)
+// 2. Login
 app.post("/api/auth/login", async (req, res) => {
   const { username, password } = req.body;
-
   try {
-    // 1. Encontrar o utilizador na BD pelo username
     const user = await User.findOne({ username });
-
-    // 2. Verificar se o utilizador existe E se a password está correta
-    // (Usando o método matchPassword do modelo User.js, que usa bcrypt)
     if (user && (await user.matchPassword(password))) {
-      // 🛑 Em produção, criaria e enviaria um JWT Token aqui.
       res.json({
         _id: user._id,
         username: user.username,
         message: "Login bem-sucedido.",
       });
     } else {
-      // Se o utilizador não existir ou a password estiver errada
       res.status(401).json({ message: "Credenciais inválidas." });
     }
   } catch (error) {
@@ -94,46 +79,53 @@ app.post("/api/auth/login", async (req, res) => {
 });
 
 // ==========================================================
-// 📝 ROTA DE ATUALIZAÇÃO DO PERFIL (Para o GetStarted.jsx)
+// 📝 ROTAS DE PERFIL (GetStarted & Profile Display)
 // ==========================================================
 
+// 3. ATUALIZAR Perfil (PUT) - Usado pelo GetStarted.jsx
 app.put("/api/profile/:userId", async (req, res) => {
   const { userId } = req.params;
-  // req.body contém todos os campos do GetStarted.jsx (firstName, school, quote, achievements, etc.)
   const profileData = req.body;
 
   try {
-    // 1. Encontrar o utilizador pelo ID
     const user = await User.findById(userId);
-
     if (!user) {
       return res.status(404).json({ message: "Utilizador não encontrado." });
     }
 
-    // 2. Anexar e Salvar os Dados do Perfil
-
-    // 🛑 ANEXAR DADOS: Usamos Object.assign para copiar todos os campos de profileData
-    // para o documento do utilizador (Mongoose é flexível e adiciona os novos campos).
+    // Mescla os dados recebidos no documento do utilizador
     Object.assign(user, profileData);
+    await user.save();
 
-    await user.save(); // Salva o documento atualizado na base de dados
-
-    // 3. Responder com sucesso
-    res.status(200).json({
-      message: "Perfil atualizado com sucesso!",
-      // Devolvemos o objeto atualizado (exclui a password hashada por segurança, a menos que especificado no modelo)
-      user: {
-        _id: user._id,
-        username: user.username,
-        // Aqui estariam os novos campos: firstName, school, etc.
-        ...profileData,
-      },
-    });
+    res.status(200).json({ message: "Perfil atualizado com sucesso!", user });
   } catch (error) {
     console.error("Erro ao atualizar perfil:", error);
-    // Devolve um erro 500 se algo correr mal (ex: problema de conexão com a BD)
-    res
-      .status(500)
-      .json({ message: "Erro interno do servidor ao salvar o perfil." });
+    res.status(500).json({ message: "Erro ao salvar o perfil." });
+  }
+});
+
+// 4. OBTER Perfil (GET) - Usado pelo Profile.jsx
+// ESTA ROTA É ESSENCIAL PARA O TEU PROFILE.JSX FUNCIONAR
+app.get("/api/profile/:userId", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId).select("-password"); // Remove a password por segurança
+    if (!user) {
+      return res.status(404).json({ message: "Perfil não encontrado." });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao carregar perfil." });
+  }
+});
+
+// 5. LISTAR TODOS OS PERFIS (Opcional - Para a página geral do Yearbook)
+app.get("/api/yearbook/profiles", async (req, res) => {
+  try {
+    const users = await User.find({ firstName: { $exists: true } }).select(
+      "username firstName lastName profilePhoto course"
+    );
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao listar perfis." });
   }
 });

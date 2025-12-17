@@ -1,6 +1,33 @@
 import React, { useState } from "react";
 import "../styles/main.css";
 
+// ✅ COMPONENTE EXTERNO PARA NÃO PERDER O FOCO
+const InputField = ({
+  label,
+  type = "text",
+  placeholder,
+  pattern,
+  title,
+  name,
+  value,
+  onChange,
+  required,
+}) => (
+  <div className="input-field-wrapper">
+    <label>{label}</label>
+    <input
+      type={type}
+      placeholder={`e.g. ${placeholder}`}
+      pattern={pattern}
+      title={title}
+      name={name}
+      value={value || ""}
+      onChange={onChange}
+      required={required}
+    />
+  </div>
+);
+
 export default function GetStarted({ userId, onFinish }) {
   const [activeTab, setActiveTab] = useState("personal");
   const [loading, setLoading] = useState(false);
@@ -15,29 +42,33 @@ export default function GetStarted({ userId, onFinish }) {
     hometown: "",
     city: "",
     address: "",
-
     school: "",
     year: "",
     course: "",
     section: "",
-
     achievements: [],
-
     quote: "",
   });
 
-  // Estado para o achievement em edição no modal
   const [newAchievement, setNewAchievement] = useState({
     title: "",
     description: "",
-    image: null,
+    image: null, // Mantemos o ficheiro original para o preview
   });
 
-  // Estados para as fotos (mantidos separados para upload)
-  const [coverPhoto, setCoverPhoto] = useState(null);
-  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [coverPhoto, setCoverPhoto] = useState(null); // Guardará Base64
+  const [profilePhoto, setProfilePhoto] = useState(null); // Guardará Base64
 
-  // 🛑 Handler genérico para inputs simples (Personal, Class, Quote)
+  // ✅ Função para transformar imagem em string para a Base de Dados
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setProfileData((prevData) => ({
@@ -46,7 +77,6 @@ export default function GetStarted({ userId, onFinish }) {
     }));
   };
 
-  // Navegação entre tabs (Permanecem iguais)
   const handleNextStep = () => {
     if (activeTab === "personal") setActiveTab("class");
     else if (activeTab === "class") setActiveTab("achievements");
@@ -54,184 +84,96 @@ export default function GetStarted({ userId, onFinish }) {
   };
 
   const handleFinish = async () => {
-    // 1. Verificações de Frontend (Mantenha estas)
     if (profileData.quote.length > 50) {
-      alert("Citação muito longa! Máx. 50 caracteres.");
+      alert("Citação muito longa!");
       return;
     }
-
-    setLoading(true);
-
-    // 🛑 ATENÇÃO: Desativamos a verificação do userId para o mock
-    // if (!userId) {
-    //   alert("Erro de autenticação. ID do utilizador não encontrado.");
-    //   setLoading(false);
-    //   return;
-    // }
-
-    // ----------------------------------------------------------------------
-    // 🛑 MOCK: SIMULAÇÃO DA CHAMADA DE BACKEND (Sem fazer o fetch real)
-    // ----------------------------------------------------------------------
-    console.log("SIMULAÇÃO: Enviando dados para o servidor...");
-    console.log("Dados do Perfil:", profileData);
-
-    // Simula um atraso de rede de 1 segundo (como se estivesse a guardar na BD)
-    setTimeout(() => {
-      try {
-        // AQUI O BACKEND RESPONDERIA COM SUCESSO
-        alert(
-          "✅ [MOCK] Perfil concluído e salvo com sucesso! A redirecionar..."
-        );
-
-        // Chamamos a função para avançar a página (para 'yearbook')
-        if (onFinish) {
-          onFinish();
-        }
-      } catch (error) {
-        // Simulação de falha
-        alert("❌ [MOCK] Falha na simulação de salvamento.");
-      } finally {
-        setLoading(false);
-      }
-    }, 1000); // 1000ms = 1 segundo de "carregamento"
-
-    // ----------------------------------------------------------------------
-  };
-  {
-    /*// 🛑 LÓGICA DE ENVIO FINAL PARA O BACKEND (Permanece igual)
-  const handleFinish = async () => {
-    // 1. Verificações de Frontend
     if (!userId) {
-      alert("Erro de autenticação. ID do utilizador não encontrado.");
-      return;
-    }
-
-    if (profileData.quote.length > 50) {
-      alert("Citação muito longa! Máx. 50 caracteres.");
+      alert("Erro: ID do utilizador não encontrado.");
       return;
     }
 
     setLoading(true);
-
     try {
-      // Endpoint: PUT http://localhost:5005/api/profile/:userId
+      // ✅ Juntamos os dados de texto com as imagens em Base64
+      const finalData = {
+        ...profileData,
+        coverPhoto,
+        profilePhoto,
+      };
+
       const response = await fetch(
         `http://localhost:5005/api/profile/${userId}`,
         {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(profileData),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(finalData),
         }
       );
 
-      const data = await response.json();
-
       if (response.ok) {
-        alert("Página do Yearbook concluída e salva! A redirecionar...");
-        if (onFinish) {
-          onFinish();
-        }
+        alert("✅ Perfil guardado com sucesso!");
+        if (onFinish) onFinish();
       } else {
-        alert(
-          `Falha ao salvar o perfil: ${data.message || "Erro desconhecido."}`
-        );
+        const data = await response.json();
+        alert(`❌ Erro: ${data.message}`);
       }
     } catch (error) {
-      console.error("Erro de conexão ao salvar perfil:", error);
-      alert("Erro de conexão ao salvar o perfil. Verifique o backend (5005).");
+      console.error("Erro:", error);
+      alert("Erro de conexão ao servidor.");
     } finally {
       setLoading(false);
     }
   };
 
-   */
-  }
+  // ✅ Handlers de Imagem corrigidos para converter para Base64
+  const handleCoverChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const b64 = await convertToBase64(file);
+      setCoverPhoto(b64);
+    }
+  };
 
-  // 🛑 Modal Achievements (Lógica de estado corrigida para usar profileData)
+  const handleProfileChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const b64 = await convertToBase64(file);
+      setProfilePhoto(b64);
+    }
+  };
+
+  // Handlers da Modal de Achievements (Mantendo a tua estrutura)
   const handleAddAchievement = () => setShowModal(true);
 
   const handleModalSubmit = (e) => {
     e.preventDefault();
-
-    // Adiciona o achievement ao array achievements no profileData
     setProfileData((prevData) => ({
       ...prevData,
       achievements: [...prevData.achievements, newAchievement],
     }));
-
-    // Reset o estado do novo achievement
     setNewAchievement({ title: "", description: "", image: null });
     setShowModal(false);
   };
 
   const handleModalChange = (e) => {
     const { name, value, files } = e.target;
-
     if (name === "image") {
-      setNewAchievement((prevAchievement) => ({
-        ...prevAchievement,
-        image: files[0],
-      }));
+      setNewAchievement((prev) => ({ ...prev, image: files[0] }));
     } else {
-      setNewAchievement((prevAchievement) => ({
-        ...prevAchievement,
-        [name]: value,
-      }));
+      setNewAchievement((prev) => ({ ...prev, [name]: value }));
     }
   };
-
-  // Upload de fotos (Permanecem iguais)
-  const handleCoverChange = (e) => {
-    const file = e.target.files[0];
-    if (file) setCoverPhoto(URL.createObjectURL(file));
-  };
-
-  const handleProfileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) setProfilePhoto(URL.createObjectURL(file));
-  };
-
-  // 🛑 Função auxiliar InputField CORRIGIDA
-  const InputField = ({
-    label,
-    type = "text",
-    placeholder,
-    pattern,
-    title,
-    name,
-    value,
-    onChange,
-    required,
-  }) => (
-    <div className="input-field-wrapper">
-      <label>{label}</label>
-      <input
-        type={type}
-        placeholder={`e.g. ${placeholder}`}
-        pattern={pattern}
-        title={title}
-        name={name} // Usado pelo handleInputChange
-        value={value || ""}
-        onChange={onChange} // Usa a função passada
-        required={required}
-      />
-    </div>
-  );
 
   return (
     <div className="page">
       <div className="getstarted-main">
-        {/* Header (Sem alterações) */}
         <div className="getstarted-header">
           <h1>WELCOME TO YOUR YEARBOOK!</h1>
           <h4>Let’s complete your profile so others can get to know you.</h4>
         </div>
 
-        {/* Cover & Profile Photo (Sem alterações) */}
         <div className="cover-wrapper">
-          {/* Cover Photo */}
           <div className="cover-upload">
             {coverPhoto ? (
               <img src={coverPhoto} alt="Cover" className="cover-photo" />
@@ -249,7 +191,6 @@ export default function GetStarted({ userId, onFinish }) {
             )}
           </div>
 
-          {/* Profile Photo */}
           <div className="profile-upload">
             {profilePhoto ? (
               <img src={profilePhoto} alt="Profile" className="profile-photo" />
@@ -268,7 +209,6 @@ export default function GetStarted({ userId, onFinish }) {
           </div>
         </div>
 
-        {/* Tabs (Sem alterações) */}
         <div className="tabs">
           {["personal", "class", "achievements", "quote"].map((tab) => (
             <button
@@ -287,15 +227,12 @@ export default function GetStarted({ userId, onFinish }) {
           ))}
         </div>
 
-        {/* Tab Content */}
         <div className="tab-content">
           {activeTab === "personal" && (
             <div className="tab personal">
               <div className="columns-wrapper">
                 <div className="column">
-                  {/* 🛑 LIGAÇÃO CORRIGIDA */}
                   <InputField
-                    type="text"
                     label="First Name:"
                     name="firstName"
                     placeholder="John"
@@ -326,13 +263,11 @@ export default function GetStarted({ userId, onFinish }) {
                   />
                 </div>
                 <div className="column">
-                  {/* 🛑 LIGAÇÃO CORRIGIDA */}
                   <InputField
                     label="Date of Birth:"
                     name="dateOfBirth"
                     placeholder="dd/mm/yyyy"
-                    pattern="\d{2}/\d{2}/\d{4}"
-                    title="Please enter the date in dd/mm/yyyy format"
+                    pattern="\\d{2}/\\d{2}/\\d{4}"
                     value={profileData.dateOfBirth}
                     onChange={handleInputChange}
                   />
@@ -366,7 +301,6 @@ export default function GetStarted({ userId, onFinish }) {
             <div className="tab class">
               <div className="columns-wrapper">
                 <div className="column">
-                  {/* 🛑 LIGAÇÃO CORRIGIDA */}
                   <InputField
                     label="School/University:"
                     name="school"
@@ -383,7 +317,6 @@ export default function GetStarted({ userId, onFinish }) {
                   />
                 </div>
                 <div className="column">
-                  {/* 🛑 LIGAÇÃO CORRIGIDA */}
                   <InputField
                     label="Course/Program:"
                     name="course"
@@ -406,14 +339,12 @@ export default function GetStarted({ userId, onFinish }) {
           {activeTab === "achievements" && (
             <div className="tab achievements">
               <h3 className="achievements-title">My Achievements</h3>
-
               <button
                 className="btn-add-achievement"
                 onClick={handleAddAchievement}
               >
                 + Add New Achievement
               </button>
-
               <div className="achievements-list">
                 {profileData.achievements.map((a, index) => (
                   <div key={index} className="achievement-item">
@@ -421,7 +352,6 @@ export default function GetStarted({ userId, onFinish }) {
                       <strong>{a.title}</strong>
                       <p>{a.description}</p>
                     </div>
-
                     {a.image && (
                       <img
                         src={URL.createObjectURL(a.image)}
@@ -444,7 +374,7 @@ export default function GetStarted({ userId, onFinish }) {
                   placeholder="e.g. The only way to do great work is to love what you do."
                   name="quote"
                   value={profileData.quote}
-                  onChange={handleInputChange} // 🛑 LIGAÇÃO CORRIGIDA
+                  onChange={handleInputChange}
                 />
                 <div
                   className={`quote-counter ${
@@ -458,7 +388,6 @@ export default function GetStarted({ userId, onFinish }) {
           )}
         </div>
 
-        {/* Botões Next / Finish */}
         {activeTab !== "quote" && (
           <button className="btn-continue" onClick={handleNextStep}>
             Next Step
@@ -475,7 +404,7 @@ export default function GetStarted({ userId, onFinish }) {
         )}
       </div>
 
-      {/* Modal (Permanece igual) */}
+      {/* 🛑 A TUA MODAL ORIGINAL MANTIDA */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -490,16 +419,14 @@ export default function GetStarted({ userId, onFinish }) {
                 onChange={handleModalChange}
                 required
               />
-
               <label>Description:</label>
               <textarea
                 name="description"
-                placeholder="e.g. Achieved top grades in the final year of studies."
+                placeholder="e.g. Achieved top grades..."
                 value={newAchievement.description}
                 onChange={handleModalChange}
                 required
               />
-
               <label>Image (Optional):</label>
               <input
                 type="file"
@@ -507,7 +434,6 @@ export default function GetStarted({ userId, onFinish }) {
                 onChange={handleModalChange}
                 accept="image/*"
               />
-
               <div className="modal-buttons">
                 <button type="button" onClick={() => setShowModal(false)}>
                   Cancel

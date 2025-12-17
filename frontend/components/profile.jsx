@@ -1,136 +1,134 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/main.css";
 
-const mockProfileData = {
-  firstName: "John",
-  lastName: "Doe",
-  email: "john.doe@yearbook.com",
-  school: "University of Lisbon",
-  course: "Computer Science",
-  graduationYear: "2024",
-  hometown: "Porto",
-  quote: "The only way to do great work is to love what you do.",
-  friendCount: 42,
-  class: "2024 - A",
-  signatures: [
-    {
-      sender: "Alice",
-      message: "Greatest coder I know! Good luck with the job search!",
-    },
-    {
-      sender: "Bob",
-      message: "We'll miss your bad jokes in the lab. Keep in touch!",
-    },
-    {
-      sender: "Charlie",
-      message: "A true leader. See you at the graduation party!",
-    },
-  ],
-  friends: [
-    { id: 1, name: "Alice", photo: "https://i.pravatar.cc/50?img=1" },
-    { id: 2, name: "Bob", photo: "https://i.pravatar.cc/50?img=2" },
-    { id: 3, name: "Charlie", photo: "https://i.pravatar.cc/50?img=3" },
-    { id: 4, name: "Diana", photo: "https://i.pravatar.cc/50?img=4" },
-  ],
-  profilePhoto: "https://i.pravatar.cc/150?img=5",
-  coverPhoto: "https://picsum.photos/1200/300?random=1",
-  achievements: [
-    {
-      title: "Academic Excellence Award",
-      description: "Top student in Software Engineering.",
-    },
-    {
-      title: "Hackathon Winner",
-      description: "First place in the 2023 University Hackathon.",
-    },
-  ],
-};
+export default function Profile({ userId }) {
+  // 1. Estado para guardar os dados que vêm da BD
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-export default function Profile() {
-  const profile = mockProfileData;
+  // 2. Procurar os dados no Backend ao carregar a página
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        // Se não houver userId via props, tenta ir buscar ao localStorage
+        const id = userId || localStorage.getItem("userId");
+
+        if (!id) {
+          console.error("ID do utilizador não encontrado");
+          setLoading(false);
+          return;
+        }
+
+        const response = await fetch(`http://localhost:5005/api/profile/${id}`);
+        const data = await response.json();
+
+        if (response.ok) {
+          setProfile(data);
+        } else {
+          console.error("Erro ao procurar perfil:", data.message);
+        }
+      } catch (error) {
+        console.error("Erro de conexão:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [userId]);
+
+  // Enquanto carrega, mostra uma mensagem simples
+  if (loading)
+    return <div className="loading">A carregar o teu Yearbook...</div>;
+
+  // Se não encontrar perfil (ex: ainda não preencheu o GetStarted)
+  if (!profile) return <div className="error">Perfil não encontrado.</div>;
 
   return (
     <div className="page profile-page-container">
-      {/* 1. HEADER (Apenas Capa e Foto) */}
+      {/* 1. HEADER (Capa e Foto reais da BD) */}
       <header className="profile-header-area">
-        {/* Foto de Capa (Full Width) */}
         <div
           className="cover-area"
-          style={{ backgroundImage: `url(${profile.coverPhoto})` }}
+          style={{
+            backgroundImage: `url(${
+              profile.coverPhoto || "https://via.placeholder.com/1200x300"
+            })`,
+            backgroundColor: "#ddd",
+          }}
         />
 
-        {/* Foto de Perfil à Esquerda (Bate na Linha Inferior) */}
-        {/* Movemos este contêiner para a posição de sobreposição */}
         <div className="profile-img-overlay-pos">
           <img
-            src={profile.profilePhoto}
+            src={profile.profilePhoto || "https://via.placeholder.com/150"}
             alt={`${profile.firstName}'s Profile`}
             className="profile-photo-lg"
           />
         </div>
       </header>
 
-      {/* 2. CONTEÚDO PRINCIPAL */}
       <main className="profile-main-content">
-        {/* 🛑 NOVA SEÇÃO: INTRODUÇÃO (Nome, Amigos, Quote) */}
         <section className="profile-section profile-intro-section">
           <div className="profile-main-details">
             <div className="name-and-friends">
               <h1 className="profile-name">
                 {profile.firstName} {profile.lastName}
               </h1>
-              <p className="friend-count">{profile.friendCount} Friends 👥</p>
+              <p className="friend-count">
+                {profile.friends?.length || 0} Friends 👥
+              </p>
             </div>
 
             <p className="profile-class">
-              Class: <strong>{profile.class}</strong>
+              Class/Section: <strong>{profile.section || "N/A"}</strong>
             </p>
             <p className="profile-course">
               Course: <strong>{profile.course}</strong>
             </p>
           </div>
 
-          {/* Citação (Quote) à Direita */}
           <div className="profile-quote-box">
             <h3>"Quote"</h3>
-            <p className="quote-text-lg">"{profile.quote}"</p>
+            <p className="quote-text-lg">
+              "{profile.quote || "No quote added yet."}"
+            </p>
           </div>
         </section>
 
         <hr className="section-divider" />
 
-        {/* Seção Principal (Achievements e Contactos) - Colunas */}
         <div className="main-sections-wrapper">
-          {/* Coluna 1: Achievements */}
+          {/* Coluna 1: Achievements Reais */}
           <section className="profile-section achievements-list-display">
             <h2>🏆 Achievements</h2>
-            {/* ... (renderização de achievements) ... */}
             <div className="achievement-grid">
-              {profile.achievements.map((item, index) => (
-                <div key={index} className="achievement-card">
-                  {/* 🛑 NOVO: Contentor Flexbox (Texto e Imagem) */}
-                  <div className="achievement-card-content">
-                    {/* Texto à Esquerda */}
-                    <div className="achievement-text-area">
-                      <h4>{item.title}</h4>
-                      <p>{item.description}</p>
+              {profile.achievements && profile.achievements.length > 0 ? (
+                profile.achievements.map((item, index) => (
+                  <div key={index} className="achievement-card">
+                    <div className="achievement-card-content">
+                      <div className="achievement-text-area">
+                        <h4>{item.title}</h4>
+                        <p>{item.description}</p>
+                      </div>
+                      {/* Se o achievement tiver imagem guardada */}
+                      {item.image && (
+                        <img
+                          src={item.image}
+                          alt="Achievement"
+                          className="achievement-card-img"
+                        />
+                      )}
                     </div>
-
-                    {/* Imagem à Direita */}
-                    <img
-                      src="https://i.pravatar.cc/50?img=15" // Imagem mockada para o Achievement
-                      alt="Achievement Icon"
-                      className="achievement-card-img"
-                    />
                   </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p>No achievements added yet.</p>
+              )}
             </div>
           </section>
 
           <section className="profile-section personal-contact">
             <h2>📞 Contact & Info</h2>
-
             <div className="contact-card">
               <div className="contact-details">
                 <p>
@@ -140,7 +138,13 @@ export default function Profile() {
                   <strong>Hometown:</strong> {profile.hometown}
                 </p>
                 <p>
-                  <strong>Graduation:</strong> {profile.graduationYear}
+                  <strong>City:</strong> {profile.city}
+                </p>
+                <p>
+                  <strong>Graduation Year:</strong> {profile.year}
+                </p>
+                <p>
+                  <strong>School:</strong> {profile.school}
                 </p>
               </div>
             </div>
@@ -149,37 +153,32 @@ export default function Profile() {
 
         <hr className="section-divider" />
 
-        {/* Seção 3: Assinaturas e Amigos */}
+        {/* Seção 3: Mensagens e Amigos */}
         <div className="signatures-friends-wrapper">
-          {/* Coluna 1: Assinaturas / Mensagens */}
           <section className="profile-section signatures-area">
-            <h2>💌 Yearbook Messages ({profile.signatures.length})</h2>
-            {/* ... (renderização de signatures) ... */}
+            <h2>💌 Yearbook Messages ({profile.signatures?.length || 0})</h2>
             <div className="signatures-list">
-              {profile.signatures.map((sig, index) => (
+              {profile.signatures?.map((sig, index) => (
                 <div key={index} className="signature-card">
                   <p className="signature-message">"{sig.message}"</p>
                   <p className="signature-sender">— {sig.sender}</p>
                 </div>
-              ))}
+              )) || <p>No messages yet. Be the first to sign!</p>}
             </div>
           </section>
 
-          {/* Coluna 2: Fotos dos Amigos */}
           <section className="profile-section friends-photos-area">
-            <h2>👥 Friends ({profile.friends.length})</h2>
-            {/* ... (renderização de amigos) ... */}
+            <h2>👥 Friends ({profile.friends?.length || 0})</h2>
             <div className="friends-photo-grid">
-              {profile.friends.map((friend) => (
+              {profile.friends?.map((friend) => (
                 <div key={friend.id} className="friend-circle-container">
                   <img
                     src={friend.photo}
                     alt={friend.name}
-                    title={friend.name}
                     className="friend-circle-photo"
                   />
                 </div>
-              ))}
+              )) || <p>Looking for friends...</p>}
             </div>
           </section>
         </div>

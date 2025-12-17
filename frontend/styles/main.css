@@ -221,21 +221,19 @@ button:hover {
   background: #3a4a5a;
   display: flex;
   justify-content: center;
-  border-radius: 25px;
   align-items: center;
+  border-radius: 25px;
   color: #ddd;
   font-weight: bold;
   font-size: 28px;
+  overflow: hidden;
+  position: relative;
 }
 
-.cover-icon {
-  cursor: pointer;
-  align-items: center;
-}
-
-.profile-icon {
-  cursor: pointer;
-  align-items: center;
+.cover-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .profile-upload {
@@ -253,6 +251,14 @@ button:hover {
   color: #ddd;
   font-weight: bold;
   font-size: 18px;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.profile-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .getstarted-main {
