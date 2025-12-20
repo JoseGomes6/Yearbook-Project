@@ -1241,6 +1241,11 @@ input {
   color: #333;
 }
 
+.btn-remove:hover {
+  background-color: #cc0000 !important;
+  transform: scale(1.05);
+  transition: 0.2s;
+}
 /* ================== ASSINATURAS E AMIGOS ================== */
 
 .signatures-friends-wrapper {

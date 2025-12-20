@@ -63,11 +63,17 @@ export default function Yearbook({ userId, onViewProfile, loggedInUser }) {
 
   // 2. NOVA LÓGICA DE ESTADO: Verifica se é Amigo, se está Pendente ou nada
   const getFriendshipStatus = (member) => {
-    // Se o ID dele está na tua lista de amigos
-    if (loggedInUser?.friends?.includes(member._id)) return "FRIENDS";
+    const currentId = userId || localStorage.getItem("userId");
 
-    // Se o teu ID está na lista de pedidos dele
-    if (member.friendRequests?.includes(userId)) return "PENDING";
+    // 1. Verifica se o meu ID está na lista de amigos DELE
+    if (member.friends && member.friends.includes(currentId)) {
+      return "FRIENDS";
+    }
+
+    // 2. Verifica se o meu ID está na lista de pedidos pendentes DELE
+    if (member.friendRequests && member.friendRequests.includes(currentId)) {
+      return "PENDING";
+    }
 
     return "NONE";
   };
