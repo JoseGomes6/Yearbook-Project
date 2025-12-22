@@ -17,9 +17,7 @@ export default function Profile({ userId, navigate }) {
 
   const fetchProfileData = useCallback(async () => {
     try {
-      const response = await fetch(
-        `http://localhost:5005/api/profile/${targetId}`
-      );
+      const response = await fetch(`/api/profile/${targetId}`);
       if (!response.ok) throw new Error("Profile not found");
       const data = await response.json();
       setProfile(data);
@@ -44,17 +42,14 @@ export default function Profile({ userId, navigate }) {
 
     setSubmitting(true);
     try {
-      const response = await fetch(
-        `http://localhost:5005/api/profile/signature/${targetId}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            senderId: myId,
-            message: newMessage,
-          }),
-        }
-      );
+      const response = await fetch(`/api/profile/signature/${targetId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          senderId: myId,
+          message: newMessage,
+        }),
+      });
 
       if (response.ok) {
         setNewMessage("");

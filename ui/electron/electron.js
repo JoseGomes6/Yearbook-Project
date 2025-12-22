@@ -10,7 +10,7 @@ function createWindow() {
     },
   });
 
-  win.loadURL("http://localhost:3000");
+  win.loadURL("http://10.17.0.30");
 }
 
 app.whenReady().then(createWindow);

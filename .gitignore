@@ -10,3 +10,7 @@ yarn-error.log
 
 # Diretórios de build do Frontend (Vite/React)
 dist/
+
+node_modules/
+video-demo.mp4
+.DS_Store

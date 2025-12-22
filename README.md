@@ -1,6 +1,16 @@
-# 🎓 Digital Yearbook – Desktop App (Electron & React)
+# Digital Yearbook – Desktop App (Electron & React)
 
-## 📖 Project Description
+# Live Demo
+
+The application is deployed and running on the Department's server:
+
+URL: http://10.17.0.30
+
+## Application Screenshot
+
+![Digital Yearbook Interface](./app-screenshot.png)
+
+## Project Description
 
 The **Digital Yearbook** is a modern and responsive application that serves as an interactive digital yearbook for a class.  
 Students can create and customize their personal profiles, showcasing personal information, academic achievements, and a favorite quote.  
@@ -8,9 +18,11 @@ Users can also leave **signatures (messages)** on each other's profiles, simulat
 
 The project is built with **React** for the user interface, **Electron** for the desktop application, and **Node.js + MongoDB** for backend data persistence and authentication.
 
----
+# Student Contributions
 
-## 🛠️ Technologies Used
+-José Pedro Gomes - 2025171142 - ### Full Stack Development: Backend API (Node/Express), Database Design (MongoDB), Frontend UI (React), Desktop Integration (Electron), and Server Deployment (PM2).
+
+## Technologies Used
 
 - **Frontend:** React
 - **Desktop App:** Electron
@@ -20,7 +32,7 @@ The project is built with **React** for the user interface, **Electron** for the
 
 ---
 
-## ▶️ Execution Instructions
+## Execution Instructions
 
 To run the application, the **Backend** and **Frontend** must be running simultaneously.  
 Electron uses the running React app to display the desktop version.
@@ -67,3 +79,9 @@ Make sure the React application is already running.
 
 3. Start the Electron app:
    npx electron electron.js
+
+# Database Initialization
+
+The application was initialized and exported using mongoexport. To restore the default state locally, use the following mongoimport command:
+
+mongoimport --uri="YOUR_MONGODB_URI" --collection=users --file=database_init.json

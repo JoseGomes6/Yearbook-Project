@@ -58,9 +58,7 @@ export default function EditProfile({ navigate }) {
     const fetchProfile = async () => {
       if (!userId) return;
       try {
-        const response = await fetch(
-          `http://localhost:5005/api/profile/${userId}`
-        );
+        const response = await fetch(`/api/profile/${userId}`);
         if (response.ok) {
           const data = await response.json();
           setProfileData((prev) => ({ ...prev, ...data }));
@@ -108,14 +106,11 @@ export default function EditProfile({ navigate }) {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const response = await fetch(
-        `http://localhost:5005/api/profile/${userId}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(profileData),
-        }
-      );
+      const response = await fetch(`/api/profile/${userId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(profileData),
+      });
       if (response.ok) {
         alert("✅ Changes saved!");
         navigate(`/profile/${userId}`);

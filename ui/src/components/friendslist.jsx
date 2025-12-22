@@ -12,15 +12,11 @@ export default function FriendsList({ userId, navigate }) {
       const id = userId || localStorage.getItem("userId");
       if (!id) return;
 
-      const resRequests = await fetch(
-        `http://localhost:5005/api/friends/requests/${id}`
-      );
+      const resRequests = await fetch(`/api/friends/requests/${id}`);
       const dataRequests = await resRequests.json();
       setRequests(dataRequests);
 
-      const resFriends = await fetch(
-        `http://localhost:5005/api/friends/list/${id}`
-      );
+      const resFriends = await fetch(`/api/friends/list/${id}`);
       const dataFriends = await resFriends.json();
       setFriends(dataFriends);
     } catch (error) {
