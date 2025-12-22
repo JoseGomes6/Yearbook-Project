@@ -1,0 +1,2166 @@
+/* ===================== RESET GLOBAL ===================== */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  height: auto;
+  font-family: Arial, sans-serif;
+  background: #f0f0f0;
+  overflow-x: hidden;
+}
+
+h1,
+h2 {
+  color: #273648;
+}
+
+/* ===================== LOGIN / REGISTER ===================== */
+.app-wrapper {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  z-index: 2;
+  min-width: 250px;
+  background: #273648;
+  filter: drop-shadow(100px 0px 20px rgba(0, 0, 0, 0.5));
+  padding: 25px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  color: #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  clip-path: polygon(70% 0, 56% 17%, 88% 72%, 66% 100%, 0 100%, 0% 0%);
+}
+
+.container h1 {
+  color: white;
+}
+
+.container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.02) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+}
+
+.auth-image-side {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+}
+
+.auth-bg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.login-bg {
+  background-color: #273648;
+}
+
+.register-bg {
+  background-color: #75906b;
+}
+
+.register-bg h1,
+h3 {
+  color: #2c4156;
+}
+
+.input-wrapper {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.input-wrapper input {
+  width: 60%;
+  padding: 12px 10px 12px 35px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.input-icon {
+  position: absolute;
+  top: 45%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #2e4a56;
+}
+
+button {
+  width: 60%;
+  padding: 12px;
+  border: none;
+  border-radius: 30px;
+  background: #a6d7e2;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #427d8a;
+}
+
+.link-text {
+  color: #555;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.link-text:hover {
+  color: #fff;
+}
+
+.auth-layout {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  height: 100vh;
+}
+
+.auth-form-side {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50vw; /* Aumentamos a área de trabalho */
+  height: 100vh;
+  background-color: #007bff; /* Teu azul */
+  z-index: 2;
+
+  /* O teu polygon */
+  clip-path: polygon(70% 0, 56% 17%, 88% 72%, 66% 100%, 0 100%, 0% 0%);
+
+  /* Alinhamento do formulário */
+  display: flex;
+  justify-content: flex-start; /* Alinha à esquerda para fugir do corte da direita */
+  align-items: center;
+  padding-left: 5vw; /* Dá um espaço da borda da tela */
+}
+
+.auth-image-side {
+  width: 66.66vw;
+  height: 100vh;
+}
+
+.auth-image-side img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ===================== GETSTARTED / YEARBOOK ===================== */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  padding-bottom: 100px;
+}
+
+.get-started-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 50px;
+  background: #f4f7f6;
+  min-height: 100vh;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  color: #333;
+}
+
+.getstarted-header {
+  width: 100%;
+  text-align: left;
+  padding: 20px 5%;
+}
+
+.getstarted-header h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+.getstarted-header h4 {
+  margin: 5px 0 20px 0;
+  color: #666;
+}
+
+.cover-wrapper {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  margin-bottom: 100px;
+}
+
+.cover-upload {
+  width: calc(100% - 40px);
+  height: 100%;
+  margin: 0 20px;
+  background: #e2e8f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  color: #64748b;
+  font-weight: 600;
+  font-size: 18px;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  border: 2px dashed #cbd5e1;
+  transition: var(--transition);
+}
+
+.cover-upload:hover {
+  background: #f1f5f9;
+  border-color: var(--primary-light);
+}
+
+.cover-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-upload {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: #cbd5e1;
+  border: 6px solid white;
+  position: absolute;
+  left: 60px;
+  bottom: -70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #475569;
+  font-weight: bold;
+  font-size: 14px;
+  overflow: hidden;
+  z-index: 5;
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.profile-upload:hover {
+  transform: scale(1.05);
+}
+
+.profile-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.getstarted-main {
+  width: 100%;
+  padding: 0 5%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0px;
+}
+
+.tabs {
+  display: flex;
+  gap: 30px;
+  border-bottom: 2px solid #ccc;
+  margin-bottom: 20px;
+  justify-content: center;
+  width: 60%;
+  margin-left: 100px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  color: #555;
+  position: relative;
+  outline: none;
+  transition: color 0.3s;
+}
+
+.tab-btn:hover {
+  color: #39616a;
+  background: none;
+}
+
+.tab-btn.active {
+  color: #000;
+  font-weight: bold;
+}
+
+.tab-btn.active::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: #39616a;
+  border-radius: 2px;
+}
+
+.tab-content {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  margin-left: 100px;
+}
+
+.columns-wrapper {
+  display: flex;
+  gap: 40px;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  width: 100%;
+  padding-left: 0%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  min-width: 250px;
+}
+
+input {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Botão Continue */
+.btn-continue {
+  margin-top: 20px;
+  padding-left: 10px;
+  border: none;
+  border-radius: 10px;
+  background-color: #39616a;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%; /* ocupa toda a largura da coluna/pai */
+  max-width: 250px; /* mantém largura igual aos inputs */
+  align-self: flex-start; /* alinhado à esquerda */
+  box-sizing: border-box;
+  margin-left: 100px;
+}
+
+.btn-continue:hover {
+  background-color: #2e4a56;
+}
+
+/* Achievements Tab */
+.achievements-list {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.achievement-item {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  width: 200px;
+  background-color: #f9f9f9;
+}
+
+.achievement-item strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.achievement-add {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px dashed #39616a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  color: #39616a;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.achievement-add:hover {
+  background-color: #39616a;
+  color: white;
+  border: 2px dashed white;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal-content h3 {
+  margin: 0 0 10px 0;
+}
+
+.modal-content input[type="text"],
+.modal-content textarea,
+.modal-content input[type="file"] {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.modal-content textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.modal-buttons button {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-buttons button[type="submit"] {
+  background-color: #39616a;
+  color: white;
+}
+
+.modal-buttons button[type="button"] {
+  background-color: #ccc;
+  color: #333;
+}
+
+/* Estilo do Contêiner do Item */
+.achievement-item {
+  display: flex; /* 1. Habilita o Flexbox */
+  justify-content: space-between; /* 2. Empurra os filhos para os lados (Texto e Imagem) */
+  align-items: center; /* 3. Alinha verticalmente ao centro */
+
+  /* Adicione seus estilos de borda/padding/margem aqui */
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+/* Estilo do Texto (ocupa o espaço restante) */
+.achievement-text {
+  flex-grow: 1; /* Permite que o texto ocupe a maior parte do espaço */
+  padding-right: 15px; /* Adiciona algum espaço entre o texto e a imagem */
+}
+
+/* Estilo da Imagem (fixa no lado direito) */
+.achievement-image {
+  width: 60px; /* Tamanho fixo para a foto */
+  height: 60px;
+  object-fit: cover; /* Garante que a imagem preencha o espaço sem distorcer */
+  border-radius: 4px; /* Opcional: bordas arredondadas */
+}
+
+/* Quote textarea */
+.tab.quote textarea {
+  width: 100%;
+  max-width: 600px; /* largura máxima */
+  height: 120px; /* altura aumentada */
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  resize: none; /* impede redimensionamento manual */
+}
+
+/* Contador da Quote */
+.quote-counter {
+  text-align: right;
+  font-size: 14px;
+  margin-top: 4px;
+  color: #555;
+}
+
+.quote-counter.over-limit {
+  color: red;
+  font-weight: bold;
+}
+
+.input-field-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.input-field-wrapper label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 0.9em;
+  color: #333;
+}
+
+.input-field-wrapper input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+/* ===================== SISTEMA DE AMIZADE E CARDS ===================== */
+
+/* Member Card (Grid do Yearbook) */
+.member-card.clickable {
+  display: flex;
+  flex-direction: column; /* Força tudo a ficar um por baixo do outro */
+  align-items: flex-start;
+  padding: 20px;
+  background: #fff;
+  border-radius: 15px;
+  position: relative; /* Mantém o contexto para o card */
+  min-height: 200px; /* Garante altura mínima para não esmagar */
+}
+
+.member-card.clickable:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.1);
+  border-color: var(--secondary);
+}
+
+/* Request Card (Pedidos de Amizade) */
+.request-card {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  padding: 16px 20px;
+  border-radius: 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  border: 1px solid #f1f5f9;
+  transition: var(--transition);
+}
+
+.request-card:hover {
+  border-color: #e2e8f0;
+  box-shadow: var(--shadow-md);
+}
+
+.request-photo {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 18px;
+  border: 2px solid var(--secondary);
+  padding: 2px;
+  background: #fff;
+}
+
+.request-info {
+  flex-grow: 1;
+}
+
+.request-info strong {
+  display: block;
+  font-size: 1rem;
+  color: var(--primary);
+  margin-bottom: 2px;
+}
+
+/* Botões de Ação nos Pedidos */
+.btn-accept,
+.btn-decline {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: var(--transition);
+}
+
+.btn-accept {
+  background-color: #dcfce7; /* Verde pastel */
+  color: #15803d;
+  margin-right: 8px;
+}
+
+.btn-accept:hover {
+  background-color: #16a34a;
+  color: #ffffff;
+}
+
+.btn-decline {
+  background-color: #fee2e2; /* Vermelho pastel */
+  color: #b91c1c;
+}
+
+.btn-decline:hover {
+  background-color: #dc2626;
+  color: #ffffff;
+}
+
+/* --- STATUS & BADGES --- */
+
+.friendship-status-container {
+  margin-top: 15px; /* Cria espaço entre os dados (nome/bio) e o botão */
+  width: 100%;
+  display: flex;
+  justify-content: flex-start; /* Alinha o botão à esquerda */
+  align-items: center;
+}
+
+.badge-status {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* VERDE: Amigos */
+.badge-status.friends {
+  background-color: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+/* AMARELO: Pendente */
+.badge-status.pending {
+  background-color: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fef3c7;
+}
+
+/* Botão de Adicionar Amigo */
+.btn-add-friend {
+  position: relative; /* Garante que não está 'absolute' a flutuar sobre o texto */
+  background-color: var(--primary);
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  /* Garante que o botão se comporta como um bloco independente */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-add-friend:hover {
+  background-color: var(--primary-light);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.btn-add-friend:active {
+  transform: translateY(0);
+}
+/* ===================== BOTÕES DE AÇÃO LADO A LADO ===================== */
+
+.edit-actions {
+  display: flex;
+  flex-direction: row; /* Garante que ficam na mesma linha */
+  gap: 15px; /* Espaço entre os dois botões */
+  margin-top: 40px;
+  width: 100%;
+  max-width: 500px; /* Ajusta conforme a largura desejada para os botões */
+  justify-content: flex-start; /* Mantém o par de botões alinhado à esquerda */
+}
+
+.btn-continue,
+.btn-cancel {
+  flex: 1; /* Faz com que ambos tenham exatamente a mesma largura */
+  height: 42px; /* Altura mais elegante e profissional */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+/* Estilo do Botão Save (Esquerda) */
+.btn-continue {
+  background-color: #273648;
+  color: #ffffff;
+}
+
+.btn-continue:hover:not(:disabled) {
+  background-color: #39616a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(39, 54, 72, 0.2);
+}
+
+.btn-continue:disabled {
+  background-color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.btn-cancel {
+  background-color: #ffffff;
+  color: #64748b;
+  border: 1px solid #e2e8f0; /* Contorno leve para não competir com o Save */
+}
+
+.btn-cancel:hover {
+  background-color: #f8fafc;
+  color: #ef4444; /* Muda para vermelho suave no hover para indicar cancelamento */
+  border-color: #fecdd3;
+}
+
+/* ===================== NOVO DESIGN: ACHIEVEMENT ITEM ===================== */
+
+.achievement-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #ffffff;
+  padding: 16px 20px;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.08); /* Contorno leve */
+  position: relative;
+  transition: all 0.2s ease;
+  margin-bottom: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.achievement-item:hover {
+  border-color: #a6d7e2;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  transform: translateY(-2px);
+}
+
+/* Texto da Conquista */
+.achievement-text {
+  flex: 1; /* Ocupa todo o espaço disponível entre a cruz e a imagem */
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.achievement-text strong {
+  font-size: 1rem;
+  color: #273648;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.achievement-text p {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Imagem da Conquista (Miniatura) */
+.achievement-image {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #f1f5f9;
+  background-color: #f8fafc;
+}
+
+/* Botão de Remover (X) - Estilo Subtil que ganha cor no Hover */
+.remove-badge {
+  background: #f1f5f9;
+  color: #94a3b8;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0; /* Impede que o botão encolha */
+}
+
+.remove-badge:hover {
+  background-color: #fee2e2; /* Fundo vermelho leve */
+  color: #ef4444; /* X em vermelho vivo */
+  transform: rotate(90deg); /* Pequena animação ao passar o rato */
+}
+
+/* Ajuste para quando não há imagem */
+.achievement-item:not(:has(img)) {
+  padding-right: 20px;
+}
+
+.edit-profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 800px;
+}
+
+/* --- SECCÇÃO DE ACHIEVEMENTS --- */
+.edit-mode-achievements {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.btn-add-achievement {
+  align-self: flex-start;
+  padding: 8px 16px;
+  background-color: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  color: #39616a;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-add-achievement:hover {
+  background-color: #f1f5f9;
+  border-color: #39616a;
+  transform: translateY(-1px);
+}
+
+.edit-mode-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.edit-mode-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  padding: 15px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  position: relative;
+  transition: border-color 0.2s;
+}
+
+.edit-mode-item:hover {
+  border-color: #a6d7e2;
+}
+
+/* Botão Remover (Cruz Vermelha) */
+.remove-badge-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #fee2e2;
+  color: #ef4444;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-right: 15px;
+}
+
+.remove-badge-circle:hover {
+  background-color: #ef4444;
+  color: white;
+  transform: scale(1.1);
+}
+
+.edit-mode-text {
+  flex-grow: 1;
+  text-align: left;
+}
+
+.edit-mode-text strong {
+  display: block;
+  font-size: 1rem;
+  color: #273648;
+}
+
+.edit-mode-text p {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 2px 0 0 0;
+}
+/* ===================== EDIT QUOTE DESIGN ===================== */
+
+.tab.quote-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Alinha tudo à esquerda */
+  width: 100%;
+  max-width: 600px; /* Limita a largura para não ficar demasiado esticado */
+  gap: 12px;
+}
+
+.tab.quote-container label {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #273648;
+  letter-spacing: -0.5px;
+  margin-bottom: 4px;
+}
+
+.tab.quote-container textarea {
+  width: 100%;
+  height: 100px; /* Altura fixa */
+
+  /* IMPEDE O REDIMENSIONAMENTO */
+  resize: none;
+
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.1); /* Contorno leve */
+  background-color: #fcfcfc;
+
+  font-family: "Georgia", serif; /* Estilo de citação elegante */
+  font-style: italic;
+  font-size: 1rem;
+  color: #475569;
+  line-height: 1.5;
+
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+/* Efeito quando o utilizador clica para escrever */
+.tab.quote-container textarea:focus {
+  outline: none;
+  border-color: #a6d7e2;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(166, 215, 226, 0.15);
+}
+
+/* Contador de caracteres posicionado à direita debaixo da caixa */
+.quote-counter {
+  align-self: flex-end; /* Encosta o contador à direita da textarea */
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+}
+/* Keyframes para a animação de digitação */
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 15.5em;
+  } /* Ajuste este valor para o comprimento final do texto */
+}
+
+/* Keyframes para o cursor piscando */
+@keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: orange;
+  }
+}
+
+/* Keyframes para subir e desaparecer */
+@keyframes fade-out-up {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+}
+
+/* ===================== Yearbook ===================== */
+
+/* Container da Página */
+.yearbook-page-container {
+  /* Mantém o padding e a largura máxima do GetStarted */
+  padding-left: 10%;
+  padding-right: 10%;
+  width: 100%;
+  max-width: 100%; /* Permite que o padding controle a largura */
+  margin: 0 auto; /* Centraliza, embora o padding seja o fator principal */
+  box-sizing: border-box;
+}
+
+.yearbook-title {
+  width: 100%;
+  text-align: left; /* Alinhamento à esquerda */
+  padding: 20px 0; /* Padding superior e inferior, mas 0 nas laterais */
+  font-size: 32px;
+  margin: 0;
+}
+
+/* Filtros (Barra com 3 elementos) */
+.yearbook-filters {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  width: 100%; /* Garante que ocupem toda a largura do container */
+}
+
+.yearbook-filters input,
+.yearbook-filters select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  flex-grow: 1;
+}
+
+/* Grid de Membros (3 Colunas) */
+.members-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 3 colunas de tamanho igual */
+  gap: 20px;
+}
+
+/* Retângulo do Membro (Card) */
+.member-card {
+  display: flex;
+  border: 1px solid #eee;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: relative; /* Necessário para posicionar o botão no canto */
+}
+
+.member-photo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
+}
+
+.member-info-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  margin-bottom: auto;
+}
+
+.member-info-left {
+  flex-shrink: 0;
+}
+
+.member-info-right {
+  flex-grow: 1;
+}
+
+.member-name {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.member-detail {
+  font-size: 0.9em;
+  margin: 3px 0;
+}
+
+.btn-add-friend {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s;
+}
+
+.btn-add-friend:hover {
+  background-color: #0056b3;
+}
+
+.preview-small {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-top: 5px;
+}
+
+.get-started-form .form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.btn-cancel {
+  background: #ccc;
+  color: #333;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-left: 10px;
+  border-radius: 5px;
+}
+/* ================== ESTILOS INICIAIS DA SIDEBAR (EXPANDIDA) ================== */
+
+.app-sidebar {
+  width: 250px;
+  min-width: 250px;
+  height: 100vh;
+  background-color: #273648;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 15px;
+  transition: width 0.3s ease-in-out;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  z-index: 1000;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.sidebar-logo {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: 0;
+  white-space: nowrap;
+  align-items: right;
+  color: white;
+}
+
+/* Botão de Hambúrguer/Recolher */
+.hamburger-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2em;
+  cursor: pointer;
+  padding: 5px;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+.hamburger-btn:hover {
+  opacity: 1;
+}
+
+/* Botões de Navegação */
+.sidebar-btn,
+.logout-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 12px 10px;
+  margin-bottom: 8px;
+  text-align: left;
+  background: none;
+  border: none;
+  color: #a6d7e2; /* Cor clara para os links */
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.sidebar-btn .icon {
+  font-size: 1.2em;
+  margin-right: 15px;
+  width: 25px; /* Largura fixa para os ícones */
+  text-align: center;
+}
+
+.sidebar-btn.active {
+  background-color: #39616a; /* Cor de fundo para o botão ativo */
+  color: white;
+  font-weight: bold;
+}
+
+.sidebar-btn:hover:not(.active) {
+  background-color: #2c4156;
+}
+
+/* Footer (Logout) */
+.sidebar-footer {
+  margin-top: auto; /* Empurra o footer para o fundo */
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ================== ESTILOS PARA A SIDEBAR RECOLHIDA (.collapsed) ================== */
+
+.app-sidebar.collapsed {
+  width: 75px; /* Nova largura estreita */
+  min-width: 75px;
+  padding: 20px 0; /* Ajusta o padding para centralizar */
+}
+
+.app-sidebar.collapsed .sidebar-header {
+  justify-content: center; /* Centraliza o que resta do header */
+  margin-bottom: 40px;
+  padding: 0 10px;
+}
+
+/* Esconde o logo quando recolhida */
+.app-sidebar.collapsed .sidebar-logo {
+  display: none;
+}
+
+/* Move o botão de hambúrguer para o centro e usa-o como o único elemento visível do header */
+.app-sidebar.collapsed .hamburger-btn {
+  position: static;
+  margin: 0;
+  padding: 10px;
+  border-radius: 30px;
+}
+
+/* Ajusta os botões de navegação e logout */
+.app-sidebar.collapsed .sidebar-btn,
+.app-sidebar.collapsed .logout-btn {
+  justify-content: center;
+  padding: 12px 0;
+  margin: 8px auto;
+  width: 50px;
+}
+
+.app-sidebar.collapsed .sidebar-btn .icon,
+.app-sidebar.collapsed .logout-btn .icon {
+  margin-right: 0;
+}
+
+.app-sidebar.collapsed .label {
+  display: none;
+}
+
+.app-sidebar.collapsed + .content-area {
+  margin-left: 75px;
+}
+
+.app-wrapper.sidebar-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.content-area {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-left: 250px;
+  padding: 20px;
+}
+
+/* ================== PROFILE PAGE LAYOUT ================== */
+
+.app-wrapper.sidebar-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.content-area {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+/* Define a largura máxima do conteúdo central */
+.profile-page-container {
+  padding: 0; /* Remove o padding padrão da classe .page */
+  width: 100%;
+}
+
+.profile-header-area {
+  position: relative;
+  width: 100%;
+  margin-bottom: 0; /* Remove a margem, pois o conteúdo vai logo abaixo */
+}
+
+/* Capa: Ocupa a largura total */
+.cover-area {
+  width: 100%;
+  height: 300px; /* Altura da capa */
+  background-size: cover;
+  background-position: center;
+  /* Remover borda arredondada se for usar sidebar, ou manter se for mais estético */
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.profile-img-overlay-pos {
+  position: absolute;
+  bottom: -75px; /* Puxa o centro da foto para a linha inferior da capa (150px/2 = 75px) */
+  left: 10%;
+  z-index: 10;
+}
+
+/* Overlay que contém a foto, nome e quote */
+.profile-info-overlay {
+  position: absolute;
+  bottom: -50px; /* Ajusta a altura da sobreposição */
+  left: 10%; /* Alinha com o padding do GetStarted */
+  right: 10%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end; /* Alinha o conteúdo de nome e quote ao fundo */
+  width: 80%; /* 100% - (10% left + 10% right) */
+}
+
+/* Foto de Perfil (Bate na linha inferior da capa) */
+.profile-img-container {
+  /* Ajusta para bater na linha. O 50px acima é a margem */
+  transform: translateY(25px);
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.profile-photo-lg {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid white; /* Borda branca para destacar */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Detalhes Principais (Nome, Classe, Curso) */
+
+.profile-intro-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Alinha o conteúdo ao topo */
+  gap: 40px;
+
+  /* Margem que puxa o conteúdo para baixo da foto de perfil (150px + espaço) */
+  margin-top: 100px;
+  margin-bottom: 40px;
+
+  /* Força os elementos a terem o tamanho desejado */
+  width: 100%;
+}
+
+.profile-main-details {
+  flex-grow: 1;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+.name-and-friends {
+  display: flex;
+  align-items: baseline;
+  gap: 15px;
+}
+
+.profile-name {
+  font-size: 2.5em; /* Nome em destaque */
+  margin: 0;
+  color: #273648;
+}
+
+.friend-count {
+  font-size: 1em;
+  color: #555;
+  font-weight: bold;
+}
+
+.profile-class,
+.profile-course {
+  margin: 5px 0;
+  font-size: 1.1em;
+  color: #555;
+}
+
+/* Citação (Quote) à Direita */
+.profile-quote-box {
+  width: 300px; /* Mantém a largura fixa para a caixa de quote */
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 0; /* Removida margem inferior */
+  flex-shrink: 0;
+}
+
+.profile-quote-box h3 {
+  margin: 0 0 5px 0;
+  font-size: 1em;
+  color: #39616a;
+  border-bottom: 1px dashed #ccc;
+  padding-bottom: 5px;
+}
+
+.quote-text-lg {
+  font-style: italic;
+  margin: 0;
+  font-size: 0.95em;
+  color: #333;
+}
+
+/* ================== CONTEÚDO PRINCIPAL (Main) ================== */
+
+/* Posicionamento do Botão Edit Profile */
+.profile-intro-section {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0 10%;
+  margin-top: 100px;
+}
+
+.btn-edit-profile {
+  position: absolute;
+  /* Posiciona o botão logo abaixo da cover photo, encostado à direita do padding */
+  top: -100px;
+  right: -25px;
+
+  /* Estilo Profissional e Minimalista */
+  background-color: #273648; /* Azul escuro original */
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 1px; /* Estilo "Caps" profissional */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+  z-index: 20; /* Garante que fica por cima de outros elementos */
+}
+
+.btn-edit-profile:hover {
+  background-color: #39616a; /* Tom mais claro no hover */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-edit-profile:active {
+  transform: translateY(0);
+}
+
+/* Ajuste Mobile para o botão não fugir do ecrã */
+@media (max-width: 900px) {
+  .btn-edit-profile {
+    top: -50px;
+    right: 5%;
+    padding: 8px 15px;
+    font-size: 0.75rem;
+  }
+}
+.profile-main-content {
+  /* Alinha o conteúdo principal com a área de capa e foto */
+  padding-left: 10%;
+  padding-right: 10%;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.section-divider {
+  border: 0;
+  height: 1px;
+  background: #e0e0e0;
+  margin: 40px 0;
+}
+
+/* Layout de Duas Colunas (Achievements e Contacto) */
+.main-sections-wrapper {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.profile-section {
+  flex: 1;
+  min-width: 300px;
+}
+
+/* Achievements Grid */
+.achievement-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.achievement-card {
+  background-color: white;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 5px solid #a6d7e2;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  height: auto;
+}
+
+.achievement-card-content {
+  display: flex;
+  justify-content: space-between; /* Espaço entre texto e imagem */
+  align-items: center; /* Alinha verticalmente ao centro */
+  gap: 10px; /* Espaço entre os elementos */
+}
+
+/* Área do Texto (deve ocupar o espaço restante) */
+.achievement-text-area {
+  flex-grow: 1; /* Permite que o texto cresça */
+  /* Garante que o texto não encolha demasiado */
+  min-width: 0;
+}
+
+.achievement-text-area h4 {
+  margin: 0 0 5px 0;
+  font-size: 1em;
+}
+
+.achievement-text-area p {
+  margin: 0;
+  font-size: 0.85em;
+  color: #555;
+}
+
+/* Imagem dentro do Cartão (Tamanho Fixo na Direita) */
+.achievement-card-img {
+  width: 50px; /* Largura fixa para a imagem */
+  height: 50px; /* Altura fixa para a imagem */
+  object-fit: cover; /* Garante que a imagem preencha */
+  border-radius: 50%; /* Torna a imagem redonda */
+  border: 2px solid #39616a; /* Pequena borda para destacar */
+  flex-shrink: 0; /* Impede que a imagem encolha */
+}
+
+/* Ajuste final para o Grid de Achievements */
+.achievement-grid {
+  display: grid;
+  /* Mantenha o auto-fit para ser responsivo */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.contact-card {
+  /* Estilos semelhantes ao achievement-card */
+  background-color: white;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 5px solid #a6d7e2; /* Cor de destaque (igual a Achievements) */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin-top: 15px; /* Espaço abaixo do título <h2> */
+  width: 100%; /* Garante que ocupa a largura total da coluna */
+  box-sizing: border-box;
+}
+
+/* Garante que os detalhes do contacto estejam alinhados à esquerda (já estão por padrão, mas reforçamos) */
+.contact-details {
+  text-align: left; /* Garante alinhamento à esquerda */
+  padding: 0;
+}
+
+/* Garante que os parágrafos dentro tenham margem padrão e não tenham alinhamentos estranhos */
+.contact-details p {
+  margin: 8px 0;
+  font-size: 0.95em;
+  color: #333;
+}
+
+.btn-remove:hover {
+  background-color: #cc0000 !important;
+  transform: scale(1.05);
+  transition: 0.2s;
+}
+/* ================== ASSINATURAS E AMIGOS (UPGRADED) ================== */
+
+/* ===================== CAIXA DE MENSAGEM FIXA ===================== */
+
+.signature-form {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 35px;
+  align-items: flex-start;
+}
+
+.signature-form textarea {
+  width: 100%;
+  /* Definimos uma altura fixa para que o retângulo não mude */
+  height: 120px;
+
+  /* IMPEDE O UTILIZADOR DE AUMENTAR A CAIXA */
+  resize: none;
+
+  padding: 18px;
+  border-radius: 12px;
+
+  /* Contorno leve profissional */
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: #fcfcfc;
+
+  font-family: inherit;
+  font-size: 1rem;
+  color: #334155;
+  line-height: 1.5;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+/* Efeito de Foco */
+.signature-form textarea:focus {
+  outline: none;
+  border-color: #a6d7e2;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(166, 215, 226, 0.15);
+}
+
+/* Botão ajustado para alinhar com a caixa fixa */
+.signature-form button {
+  padding: 12px 30px;
+  background-color: #39616a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.signature-form button:hover:not(:disabled) {
+  background-color: #273648;
+  transform: translateY(-2px);
+}
+.signatures-friends-wrapper {
+  display: flex;
+  gap: 60px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.signatures-area {
+  flex: 2;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Força alinhamento à esquerda */
+}
+
+.friends-photos-area {
+  flex: 1;
+  min-width: 250px;
+  background: #f8fafc; /* Fundo subtil para destacar a barra lateral */
+  padding: 25px;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Assinaturas (Yearbook Cards) */
+.signatures-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.signature-card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08); /* Contorno leve solicitado */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.signature-card:hover {
+  transform: translateX(5px);
+  border-color: #a6d7e2;
+}
+
+.signature-message {
+  font-family: "Georgia", serif; /* Dá um aspeto de "escrito" mais elegante */
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  margin-bottom: 15px;
+  color: #475569;
+}
+
+.signature-sender {
+  text-align: left; /* Alinhado à esquerda conforme o teu padrão */
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #39616a;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.signature-sender::before {
+  content: "";
+  width: 20px;
+  height: 1px;
+  background-color: #cbd5e1;
+  display: inline-block;
+}
+
+/* Fotos dos Amigos (Círculos) */
+.friends-photo-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.friend-circle-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ddd;
+  transition: transform 0.2s;
+}
+
+.friend-circle-photo:hover {
+  transform: scale(1.1);
+  border-color: #39616a;
+}
+
+/* ===================== FRIENDS & REQUESTS PAGE (ALINHADO À ESQUERDA) ===================== */
+
+.friends-page-container {
+  padding-left: 10%;
+  padding-right: 10%;
+  max-width: 100%; /* Removido o limite para não centrar em ecrãs grandes */
+  margin-left: 0 !important; /* Força o início na esquerda */
+  margin-right: auto;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Alinha todos os blocos filhos à esquerda */
+}
+
+.friends-section {
+  width: 100%;
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Garante que o título e a lista alinhem à esquerda */
+}
+
+.friends-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #273648;
+  margin-bottom: 25px;
+  margin-left: 0; /* Remove qualquer margem automática */
+  letter-spacing: -0.5px;
+  text-align: left;
+}
+
+/* Container da Lista */
+.requests-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 800px;
+  margin-left: 0; /* Garante que a lista não flutua no centro */
+  align-items: flex-start;
+}
+
+/* Card de Pedido/Amigo */
+.request-card {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Conteúdo interno começa na esquerda */
+  background: #ffffff;
+  padding: 16px 24px;
+  border-radius: 12px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease;
+  width: 100%; /* Ocupa o espaço disponível até o max-width da lista */
+}
+
+.request-card:hover {
+  transform: translateX(5px);
+  border-color: #a6d7e2;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.request-info {
+  flex-grow: 1;
+  text-align: left; /* Garante que Nome e Escola alinhem à esquerda */
+}
+
+.request-info h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #273648;
+  font-weight: 700;
+  text-align: left;
+}
+
+.request-info p {
+  margin: 2px 0 0 0;
+  font-size: 0.85rem;
+  color: #64748b;
+  text-align: left;
+}
+
+/* Botões de Ação */
+.request-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end; /* Mantém os botões à direita do card */
+}
+
+.section-divider {
+  border: 0;
+  height: 1px;
+  background: #e2e8f0;
+  margin: 40px 0;
+  width: 100%; /* Divisor ocupa a largura total */
+}
+
+.no-results {
+  color: #94a3b8;
+  font-style: italic;
+  padding: 20px 0;
+  text-align: left;
+  margin-left: 0;
+}
+
+/* ===================== SETTINGS PAGE ===================== */
+
+.settings-page-container {
+  padding-left: 10%;
+  padding-right: 10%;
+  max-width: 100%;
+  margin-left: 0;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.settings-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #273648;
+  margin-bottom: 40px;
+  letter-spacing: -1px;
+}
+
+.settings-section {
+  width: 100%;
+  max-width: 800px; /* Mantém o conteúdo legível */
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 16px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.settings-section-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #273648;
+  margin-bottom: 10px;
+}
+
+.settings-description {
+  font-size: 0.95rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 25px;
+  max-width: 600px;
+}
+
+/* Divisor elegante */
+.settings-divider {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(to right, #e2e8f0, transparent);
+  margin: 20px 0 40px 0;
+  width: 100%;
+  max-width: 800px;
+}
+
+/* ===================== BOTÕES ===================== */
+
+/* ===================== BOTÕES DE PAGINAÇÃO REFINADOS ===================== */
+
+.pagination-controls {
+  display: flex; /* Coloca os itens lado a lado */
+  align-items: center; /* Alinha-os verticalmente ao centro */
+  gap: 12px; /* Espaço entre os botões e o texto */
+  margin-top: 25px;
+  width: 100%;
+  justify-content: flex-start; /* Garante que ficam todos à esquerda */
+}
+
+.btn-pagination {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 14px;
+  height: 32px;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  color: #475569;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap; /* Impede que o texto do botão quebre */
+}
+
+.btn-pagination:hover:not(:disabled) {
+  border-color: #39616a;
+  color: #39616a;
+  background-color: #f8fafc;
+}
+
+.btn-pagination:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.page-indicator {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #94a3b8;
+  white-space: nowrap; /* Garante que "Page X of Y" fique numa linha só */
+}
+.btn-logout-black {
+  background-color: #273648;
+  color: white;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-logout-black:hover {
+  background-color: #39616a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(39, 54, 72, 0.2);
+}
+
+/* Danger Zone Styling */
+.danger-text {
+  color: #dc2626 !important;
+}
+
+.btn-delete-red {
+  background-color: #fff1f2;
+  color: #be123c;
+  padding: 12px 28px;
+  border: 1px solid #fecdd3;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-delete-red:hover:not(:disabled) {
+  background-color: #be123c;
+  color: white;
+  border-color: #be123c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(190, 18, 60, 0.2);
+}
+
+.btn-delete-red:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===================== SKELETONS = :D ===================== */
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-title {
+  height: 40px;
+  width: 200px;
+  margin-bottom: 40px;
+}
+.skeleton-subtitle {
+  height: 25px;
+  width: 150px;
+  margin-bottom: 15px;
+}
+.skeleton-button-settings {
+  height: 45px;
+  width: 140px;
+  border-radius: 8px;
+}
+
+/* Ajuste Danger Skeleton */
+.danger-skeleton {
+  opacity: 0.5;
+}
+/* ===================== RESPONSIVIDADE (MOBILE) ===================== */
+@media (max-width: 900px) {
+  .content-area {
+    margin-left: 0 !important;
+    padding: 20px;
+  }
+  .app-sidebar {
+    display: none;
+  }
+
+  .profile-intro-section {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: 60px;
+  }
+
+  .profile-img-overlay-pos {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .profile-quote-box {
+    width: 100%;
+  }
+  .main-sections-wrapper,
+  .signatures-friends-wrapper {
+    flex-direction: column;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 500px) {
+  .cover-area {
+    height: 200px;
+  }
+  .profile-photo-lg {
+    width: 120px;
+    height: 120px;
+  }
+  .container {
+    width: 100%;
+    clip-path: none;
+  }
+}
