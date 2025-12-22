@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from "react";
-// REMOVIDO: import { useNavigate } from "react-router-dom";
 import "../styles/main.css";
 
 export default function FriendsList({ userId, navigate }) {
@@ -7,8 +6,6 @@ export default function FriendsList({ userId, navigate }) {
   const [friends, setFriends] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 1. Definimos a função de busca com useCallback para poder ser usada no useEffect
-  // e em outras funções como o acceptFriend sem causar loops ou avisos.
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
@@ -47,7 +44,7 @@ export default function FriendsList({ userId, navigate }) {
           friendId,
         }),
       });
-      if (response.ok) fetchData(); // Recarrega a lista
+      if (response.ok) fetchData();
     } catch (error) {
       console.error("Erro ao aceitar amigo:", error);
     }
@@ -61,14 +58,13 @@ export default function FriendsList({ userId, navigate }) {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            userId: userId, // O teu ID (quem está a recusar)
-            friendId: friendId, // O ID de quem enviou o pedido
+            userId: userId,
+            friendId: friendId,
           }),
         }
       );
 
       if (response.ok) {
-        // Atualiza a lista de pedidos no ecrã removendo o que acabaste de recusar
         setRequests((prev) => prev.filter((req) => req._id !== friendId));
       } else {
         console.error("Erro ao recusar no servidor");
@@ -98,7 +94,6 @@ export default function FriendsList({ userId, navigate }) {
     }
   };
 
-  // Função para renderizar os Skeletons (Igual à tua)
   const renderSkeletons = () => (
     <>
       {[1, 2, 3].map((n) => (

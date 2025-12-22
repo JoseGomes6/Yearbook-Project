@@ -1,13 +1,10 @@
-// 1. TODOS os imports no topo absoluto
 import React, { useState, useEffect, Suspense, lazy } from "react";
 import Sidebar from "./components/sidebar";
 import "./styles/main.css";
 
-// 2. Definição dos componentes Lazy (fora do array para facilitar o uso no fallback)
 const Login = lazy(() => import("./components/login"));
 const Yearbook = lazy(() => import("./components/yearbook"));
 
-// 3. Definição das rotas
 const routes = [
   { path: "/login", component: Login, public: true },
   {
@@ -92,7 +89,6 @@ export default function App() {
       r.dynamic ? currentPath.startsWith(r.path) : r.path === currentPath
     );
 
-    // CORREÇÃO AQUI: Usar os componentes lazy definidos acima, dentro de Suspense
     if (!route) {
       return (
         <Suspense fallback={<div>A carregar...</div>}>

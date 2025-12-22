@@ -6,19 +6,16 @@ export default function Settings({ userId, onLogout, navigate }) {
   const [initialLoading, setInitialLoading] = useState(true);
 
   useEffect(() => {
-    // Simula um carregamento inicial para mostrar o Skeleton
     const timer = setTimeout(() => setInitialLoading(false), 600);
     return () => clearTimeout(timer);
   }, []);
 
-  // 1. Função para Logout
   const handleLogoutClick = () => {
     if (window.confirm("Are you sure you want to log out?")) {
       onLogout();
     }
   };
 
-  // 2. Função para Apagar Conta
   const handleDeleteAccount = async () => {
     const confirmDelete = window.confirm(
       "CRITICAL WARNING: This will permanently remove your account and all your profile data. This action cannot be undone. Are you sure?"
@@ -54,7 +51,6 @@ export default function Settings({ userId, onLogout, navigate }) {
     }
   };
 
-  // RENDERIZAÇÃO DO SKELETON
   if (initialLoading) {
     return (
       <div className="page settings-page-container">
@@ -77,12 +73,10 @@ export default function Settings({ userId, onLogout, navigate }) {
     );
   }
 
-  // RENDERIZAÇÃO REAL
   return (
     <div className="page settings-page-container">
       <h1 className="settings-title">Settings</h1>
 
-      {/* SESSION SECTION */}
       <section className="settings-section">
         <h2 className="settings-section-title">Session Management</h2>
         <p className="settings-description">
@@ -95,7 +89,6 @@ export default function Settings({ userId, onLogout, navigate }) {
 
       <hr className="settings-divider" />
 
-      {/* DANGER ZONE SECTION */}
       <section className="settings-section">
         <h2 className="settings-section-title danger-text">Danger Zone</h2>
         <p className="settings-description">

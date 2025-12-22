@@ -30,9 +30,9 @@ export const getProfile = async (req, res) => {
     }).select("firstName lastName profilePhoto user");
 
     const finalData = {
-      ...userDoc.toObject(), // Dados da conta (username, friends IDs, friendRequests)
-      ...profileDoc?.toObject(), // Dados visuais (bio, escola, course)
-      friends: friendsProfiles, // ARRAY COM FOTOS E NOMES para o teu hover
+      ...userDoc.toObject(),
+      ...profileDoc?.toObject(),
+      friends: friendsProfiles,
     };
 
     res.json(finalData);

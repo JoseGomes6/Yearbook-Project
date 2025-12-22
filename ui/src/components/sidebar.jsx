@@ -3,14 +3,9 @@ import "../styles/main.css";
 
 export default function Sidebar({ onLogout, navigate, currentPath, user }) {
   const [isExpanded, setIsExpanded] = useState(true);
-  /**
-   * Lógica de Atividade adaptada para o roteador manual
-   */
   const isSearchActive = () => {
     if (currentPath === "/yearbook") return true;
 
-    // Se o path começa com /profile/ e tem algo depois (um ID), é um perfil de terceiros
-    // (Atenção: no teu App.js a rota do próprio perfil pode ser apenas /profile ou /profile/ID)
     if (
       currentPath.startsWith("/profile/") &&
       currentPath.split("/").length > 2
@@ -25,7 +20,6 @@ export default function Sidebar({ onLogout, navigate, currentPath, user }) {
       name: `Hello, ${user.username}`,
       path: "/profile",
       icon: "👤",
-      // Fica ativo se for exatamente /profile ou se não houver ID extra
       isActive:
         currentPath === "/profile" ||
         (currentPath.startsWith("/profile") &&
@@ -82,7 +76,6 @@ export default function Sidebar({ onLogout, navigate, currentPath, user }) {
         <button
           onClick={() => {
             if (onLogout) onLogout();
-            // O navigate aqui já é o manual do App.js
             navigate("/login");
           }}
           className="logout-btn"

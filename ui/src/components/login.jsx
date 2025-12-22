@@ -3,43 +3,30 @@ import React, { useState } from "react";
 export default function Login({ onLoginSuccess, navigate }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [error] = useState("");
+  const [loading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setLoading(true);
-
     try {
       const response = await fetch("http://localhost:5005/api/auth/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: username,
-          password: password,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("userId", data.user.id);
-        if (onLoginSuccess) {
-          onLoginSuccess(data);
-        }
-        navigate("/yearbook");
+        onLoginSuccess(data);
       } else {
-        setError(data.message || "Credenciais inválidas. Tente novamente.");
+        alert(data.message || "Erro no login");
       }
-    } catch (err) {
-      console.error("Erro de conexão ou servidor:", err);
-      setError("Não foi possível conectar ao servidor.");
-    } finally {
-      setLoading(false);
+    } catch (error) {
+      console.error("Erro de conexão:", error);
+      alert(
+        "Não foi possível ligar ao servidor. Verifica se o backend está ativo."
+      );
     }
   };
 

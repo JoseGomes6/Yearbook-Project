@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react"; // 1. Adiciona useCallback
+import React, { useState, useEffect, useCallback } from "react";
 import "../styles/main.css";
 
 export default function Profile({ userId, navigate }) {

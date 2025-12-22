@@ -26,13 +26,9 @@ const UserSchema = new mongoose.Schema(
     coverPhoto: { type: String, default: "" },
     profilePhoto: { type: String, default: "" },
 
-    // --- 🚩 NOVOS CAMPOS ADICIONADOS AQUI ---
-    // Guarda o ID dos amigos confirmados
     friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 
-    // Guarda o ID de quem te enviou pedidos (pendentes)
     friendRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-    // ----------------------------------------
 
     signatures: [
       {

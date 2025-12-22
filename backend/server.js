@@ -10,7 +10,6 @@ const app = express();
 const PORT = process.env.PORT || 5005;
 const MONGODB_URI = process.env.MONGODB_URI;
 
-// Configuração de CORS e Limite de JSON
 app.use(cors());
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
@@ -26,10 +25,6 @@ mongoose
   .catch((err) => {
     console.error("❌ Erro na conexão com o MongoDB:", err.message);
   });
-
-// ==========================================================
-// 🔑 ROTAS DE AUTENTICAÇÃO
-// ==========================================================
 
 app.post("/api/auth/register", async (req, res) => {
   const { username, password, email } = req.body;
@@ -67,10 +62,6 @@ app.post("/api/auth/login", async (req, res) => {
   }
 });
 
-// ==========================================================
-// 📝 ROTAS DE PERFIL
-// ==========================================================
-
 app.put("/api/profile/:userId", async (req, res) => {
   const { userId } = req.params;
   try {
@@ -98,7 +89,6 @@ app.get("/api/profile/:userId", async (req, res) => {
 
 app.get("/api/yearbook/profiles", async (req, res) => {
   try {
-    // Adicionamos 'friends' e 'friendRequests' ao select
     const users = await User.find({ firstName: { $exists: true } }).select(
       "username firstName lastName profilePhoto school course friends friendRequests"
     );
@@ -108,11 +98,6 @@ app.get("/api/yearbook/profiles", async (req, res) => {
   }
 });
 
-// ==========================================================
-// 👥 ROTAS DE AMIGOS (Friend System)
-// ==========================================================
-
-// 1. Enviar Pedido
 app.post("/api/friends/request/:targetId", async (req, res) => {
   const { senderId } = req.body;
   const { targetId } = req.params;
@@ -135,7 +120,6 @@ app.post("/api/friends/request/:targetId", async (req, res) => {
   }
 });
 
-// 2. Obter Pedidos Pendentes
 app.get("/api/friends/requests/:userId", async (req, res) => {
   try {
     const user = await User.findById(req.params.userId).populate(
@@ -148,7 +132,6 @@ app.get("/api/friends/requests/:userId", async (req, res) => {
   }
 });
 
-// 3. Obter Lista de Amigos Confirmados
 app.get("/api/friends/list/:userId", async (req, res) => {
   try {
     const user = await User.findById(req.params.userId).populate(
@@ -161,18 +144,15 @@ app.get("/api/friends/list/:userId", async (req, res) => {
   }
 });
 
-// 4. Aceitar Pedido
 app.post("/api/friends/accept", async (req, res) => {
   const { userId, friendId } = req.body;
   try {
     const user = await User.findById(userId);
     const friend = await User.findById(friendId);
 
-    // Adiciona à lista de ambos
     user.friends.push(friendId);
     friend.friends.push(userId);
 
-    // Remove dos pedidos pendentes
     user.friendRequests = user.friendRequests.filter(
       (id) => id.toString() !== friendId
     );
@@ -185,11 +165,9 @@ app.post("/api/friends/accept", async (req, res) => {
   }
 });
 
-// 5. Remover Amigo
 app.post("/api/friends/remove", async (req, res) => {
   const { userId, friendId } = req.body;
   try {
-    // Remove o link de amizade em ambos os documentos
     await User.findByIdAndUpdate(userId, { $pull: { friends: friendId } });
     await User.findByIdAndUpdate(friendId, { $pull: { friends: userId } });
     res.json({ message: "Amigo removido." });
@@ -198,7 +176,6 @@ app.post("/api/friends/remove", async (req, res) => {
   }
 });
 
-// 6. Recusar Pedido (Decline)
 app.post("/api/friends/decline", async (req, res) => {
   const { userId, friendId } = req.body;
   try {
@@ -211,13 +188,11 @@ app.post("/api/friends/decline", async (req, res) => {
   }
 });
 
-// Eliminar conta
 app.delete("/api/user/delete/:id", async (req, res) => {
   await User.findByIdAndDelete(req.params.id);
   res.status(200).send({ message: "Deleted" });
 });
 
-// Adicionar mensagens
 app.post("/api/profile/signature/:targetId", async (req, res) => {
   const { targetId } = req.params;
   const { senderId, message } = req.body;
@@ -230,12 +205,10 @@ app.post("/api/profile/signature/:targetId", async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Garante que o array existe antes de fazer push
     if (!target.signatures) {
       target.signatures = [];
     }
 
-    // Criar o objeto da mensagem com fallback para o nome
     const newSignature = {
       message: message,
       senderId: sender._id,
@@ -250,7 +223,7 @@ app.post("/api/profile/signature/:targetId", async (req, res) => {
 
     res.status(200).json({ message: "Signature added successfully!" });
   } catch (error) {
-    console.error("Error saving signature:", error); // Isto vai aparecer no terminal do teu servidor
+    console.error("Error saving signature:", error);
     res
       .status(500)
       .json({ message: "Internal server error", error: error.message });

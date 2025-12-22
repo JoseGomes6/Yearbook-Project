@@ -27,7 +27,6 @@ export default function Yearbook({ userId, navigate }) {
     fetchMembers();
   }, []);
 
-  // 1. FUNÇÃO ATUALIZADA: Agora atualiza o estado local para o botão mudar na hora
   const addFriend = async (targetId) => {
     try {
       const response = await fetch(
@@ -42,8 +41,6 @@ export default function Yearbook({ userId, navigate }) {
       if (response.ok) {
         alert("Pedido de amizade enviado!");
 
-        // Atualiza a lista de membros localmente para incluir o teu ID nos pedidos dele
-        // Isso faz o botão mudar para "Pendente" sem precisar de refresh
         setMembers((prevMembers) =>
           prevMembers.map((m) =>
             m._id === targetId
@@ -61,16 +58,13 @@ export default function Yearbook({ userId, navigate }) {
     }
   };
 
-  // 2. NOVA LÓGICA DE ESTADO: Verifica se é Amigo, se está Pendente ou nada
   const getFriendshipStatus = (member) => {
     const currentId = userId || localStorage.getItem("userId");
 
-    // 1. Verifica se o meu ID está na lista de amigos DELE
     if (member.friends && member.friends.includes(currentId)) {
       return "FRIENDS";
     }
 
-    // 2. Verifica se o meu ID está na lista de pedidos pendentes DELE
     if (member.friendRequests && member.friendRequests.includes(currentId)) {
       return "PENDING";
     }
@@ -97,7 +91,6 @@ export default function Yearbook({ userId, navigate }) {
       <div className="page yearbook-page-container">
         <h1 className="yearbook-title">Search for members</h1>
 
-        {/* Skeleton dos Filtros */}
         <div className="yearbook-filters skeleton-filters">
           <div className="skeleton-input"></div>
           <div className="skeleton-input"></div>
@@ -187,13 +180,12 @@ export default function Yearbook({ userId, navigate }) {
                   {member.course || "N/A"}
                 </p>
 
-                {/* Lógica de Amizade: Só uma destas opções será renderizada */}
                 {member._id !== userId && (
                   <div className="friendship-status-container">
                     {status === "FRIENDS" ? (
                       <span className="badge-status friends">✅ Friends</span>
                     ) : status === "PENDING" ? (
-                      <span className="badge-status pending">⏳ Pendente</span>
+                      <span className="badge-status pending">⏳ Pending</span>
                     ) : (
                       <button
                         className="btn-add-friend"

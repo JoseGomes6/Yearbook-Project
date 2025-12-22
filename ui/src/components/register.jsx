@@ -1,17 +1,12 @@
 import React, { useState } from "react";
 
-// REMOVIDO: import { useNavigate } from "react-router-dom";
-
 export default function Register({ onRegisterSuccess, navigate }) {
-  // Recebemos 'navigate' como prop do App.js
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
-  // REMOVIDO: const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,7 +29,6 @@ export default function Register({ onRegisterSuccess, navigate }) {
       const data = await response.json();
 
       if (response.ok) {
-        // Primeiro avisamos o App.js que o registo foi bem-sucedido
         if (onRegisterSuccess) {
           onRegisterSuccess(data);
         }

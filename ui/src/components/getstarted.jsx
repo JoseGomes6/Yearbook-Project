@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "../styles/main.css";
 
-// ✅ COMPONENTE EXTERNO PARA NÃO PERDER O FOCO
 const InputField = ({
   label,
   type = "text",
@@ -53,13 +52,12 @@ export default function GetStarted({ userId, navigate }) {
   const [newAchievement, setNewAchievement] = useState({
     title: "",
     description: "",
-    image: null, // Mantemos o ficheiro original para o preview
+    image: null,
   });
 
-  const [coverPhoto, setCoverPhoto] = useState(null); // Guardará Base64
-  const [profilePhoto, setProfilePhoto] = useState(null); // Guardará Base64
+  const [coverPhoto, setCoverPhoto] = useState(null);
+  const [profilePhoto, setProfilePhoto] = useState(null);
 
-  // ✅ Função para transformar imagem em string para a Base de Dados
   const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -95,7 +93,6 @@ export default function GetStarted({ userId, navigate }) {
 
     setLoading(true);
     try {
-      // ✅ Juntamos os dados de texto com as imagens em Base64
       const finalData = {
         ...profileData,
         coverPhoto,
@@ -128,7 +125,6 @@ export default function GetStarted({ userId, navigate }) {
     }
   };
 
-  // ✅ Handlers de Imagem corrigidos para converter para Base64
   const handleCoverChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -145,7 +141,6 @@ export default function GetStarted({ userId, navigate }) {
     }
   };
 
-  // Handlers da Modal de Achievements (Mantendo a tua estrutura)
   const handleAddAchievement = () => setShowModal(true);
 
   const handleModalSubmit = (e) => {
@@ -406,7 +401,6 @@ export default function GetStarted({ userId, navigate }) {
         )}
       </div>
 
-      {/* 🛑 A TUA MODAL ORIGINAL MANTIDA */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
