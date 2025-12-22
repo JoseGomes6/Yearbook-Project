@@ -1,25 +1,24 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/main.css";
 
 export default function FriendsList({ userId }) {
   const [requests, setRequests] = useState([]);
-  const [friends, setFriends] = useState([]); // Novo estado para a lista de amigos
+  const [friends, setFriends] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  // Função para carregar tudo (Pedidos e Amigos)
   const fetchData = async () => {
     try {
       setLoading(true);
       const id = userId || localStorage.getItem("userId");
 
-      // 1. Procurar Pedidos Pendentes
       const resRequests = await fetch(
         `http://localhost:5005/api/friends/requests/${id}`
       );
       const dataRequests = await resRequests.json();
       setRequests(dataRequests);
 
-      // 2. Procurar Lista de Amigos (Ajusta o endpoint conforme o teu backend)
       const resFriends = await fetch(
         `http://localhost:5005/api/friends/list/${id}`
       );
@@ -37,7 +36,22 @@ export default function FriendsList({ userId }) {
     if (id) fetchData();
   }, [userId]);
 
-  // Função para aceitar o pedido
+  // Função para renderizar os Skeletons
+  const renderSkeletons = () => (
+    <>
+      {[1, 2, 3].map((n) => (
+        <div key={n} className="skeleton-card">
+          <div className="skeleton-img skeleton"></div>
+          <div className="skeleton-text-container">
+            <div className="skeleton-title skeleton"></div>
+            <div className="skeleton-subtitle skeleton"></div>
+          </div>
+          <div className="skeleton-btn skeleton"></div>
+        </div>
+      ))}
+    </>
+  );
+
   const acceptFriend = async (friendId) => {
     try {
       const response = await fetch("http://localhost:5005/api/friends/accept", {
@@ -48,32 +62,25 @@ export default function FriendsList({ userId }) {
           friendId,
         }),
       });
-
-      if (response.ok) {
-        fetchData(); // Atualiza as duas listas
-      }
+      if (response.ok) fetchData();
     } catch (error) {
       console.error("Erro ao aceitar amigo:", error);
     }
   };
 
-  // Função para remover amigo
   const removeFriend = async (friendId) => {
     if (!window.confirm("Tens a certeza que queres remover este amigo?"))
       return;
-
     try {
       const response = await fetch("http://localhost:5005/api/friends/remove", {
-        method: "POST", // Ou DELETE, dependendo do teu backend
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           userId: userId || localStorage.getItem("userId"),
           friendId,
         }),
       });
-
       if (response.ok) {
-        // Remove da lista localmente para ser instantâneo
         setFriends(friends.filter((f) => f._id !== friendId));
       }
     } catch (error) {
@@ -81,23 +88,27 @@ export default function FriendsList({ userId }) {
     }
   };
 
-  if (loading) return <div className="loading">A carregar...</div>;
-
   return (
     <div className="page friends-page-container">
       {/* SECÇÃO 1: PEDIDOS PENDENTES */}
       <section className="friends-section">
         <h1 className="friends-title">Friend Requests</h1>
         <div className="requests-list">
-          {requests.length > 0 ? (
+          {loading ? (
+            renderSkeletons()
+          ) : requests.length > 0 ? (
             requests.map((sender) => (
               <div key={sender._id} className="request-card">
                 <img
                   src={sender.profilePhoto || "https://via.placeholder.com/150"}
                   alt={sender.firstName}
-                  className="request-photo"
+                  className="request-photo clickable"
+                  onClick={() => navigate(`/profile/${sender._id}`)}
                 />
-                <div className="request-info">
+                <div
+                  className="request-info clickable"
+                  onClick={() => navigate(`/profile/${sender._id}`)}
+                >
                   <h4>
                     {sender.firstName} {sender.lastName}
                   </h4>
@@ -126,15 +137,21 @@ export default function FriendsList({ userId }) {
       <section className="friends-section">
         <h1 className="friends-title">My Friends</h1>
         <div className="requests-list">
-          {friends.length > 0 ? (
+          {loading ? (
+            renderSkeletons()
+          ) : friends.length > 0 ? (
             friends.map((friend) => (
               <div key={friend._id} className="request-card friend-card-active">
                 <img
                   src={friend.profilePhoto || "https://via.placeholder.com/150"}
                   alt={friend.firstName}
-                  className="request-photo"
+                  className="request-photo clickable"
+                  onClick={() => navigate(`/profile/${friend._id}`)}
                 />
-                <div className="request-info">
+                <div
+                  className="request-info clickable"
+                  onClick={() => navigate(`/profile/${friend._id}`)}
+                >
                   <h4>
                     {friend.firstName} {friend.lastName}
                   </h4>

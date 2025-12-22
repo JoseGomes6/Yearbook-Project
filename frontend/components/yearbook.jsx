@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/main.css";
 
-export default function Yearbook({ userId, onViewProfile, loggedInUser }) {
+export default function Yearbook({ userId }) {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterSchool, setFilterSchool] = useState("");
   const [filterYear, setFilterYear] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMembers = async () => {
@@ -135,7 +137,7 @@ export default function Yearbook({ userId, onViewProfile, loggedInUser }) {
             <div
               key={member._id}
               className="member-card clickable"
-              onClick={() => onViewProfile(member._id)}
+              onClick={() => navigate(`/profile/${member._id}`)}
             >
               <div className="member-info-left">
                 <img

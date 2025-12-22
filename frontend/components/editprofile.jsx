@@ -1,27 +1,55 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/main.css";
 
-export default function EditProfile({ userId, onFinish, existingData }) {
+const InputField = ({
+  label,
+  type = "text",
+  placeholder,
+  name,
+  value,
+  onChange,
+  required,
+}) => (
+  <div className="input-field-wrapper">
+    <label>{label}</label>
+    <input
+      type={type}
+      placeholder={`e.g. ${placeholder}`}
+      name={name}
+      value={value || ""}
+      onChange={onChange}
+      required={required}
+    />
+  </div>
+);
+
+export default function EditProfile() {
+  const navigate = useNavigate();
+  const userId = localStorage.getItem("userId");
+
   const [activeTab, setActiveTab] = useState("personal");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  // Inicializamos o estado com os dados que já existem (mockData ou vindo da BD)
   const [profileData, setProfileData] = useState({
-    firstName: "John", // Exemplo de dados pré-preenchidos
-    lastName: "Doe",
-    email: "john.doe@yearbook.com",
+    firstName: "",
+    lastName: "",
+    email: "",
     phone: "",
     dateOfBirth: "",
-    hometown: "Porto",
+    hometown: "",
     city: "",
     address: "",
-    school: "University of Lisbon",
-    year: "2024",
-    course: "Computer Science",
-    section: "A",
+    school: "",
+    year: "",
+    course: "",
+    section: "",
     achievements: [],
-    quote: "The only way to do great work is to love what you do.",
+    quote: "",
+    coverPhoto: null,
+    profilePhoto: null,
   });
 
   const [newAchievement, setNewAchievement] = useState({
@@ -29,96 +57,138 @@ export default function EditProfile({ userId, onFinish, existingData }) {
     description: "",
     image: null,
   });
-  const [coverPhoto, setCoverPhoto] = useState(null);
-  const [profilePhoto, setProfilePhoto] = useState(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5005/api/profile/${userId}`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setProfileData((prev) => ({ ...prev, ...data }));
+        }
+      } catch (error) {
+        console.error("Erro ao carregar perfil:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (userId) fetchProfile();
+  }, [userId]);
+
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setProfileData((prev) => ({ ...prev, [name]: value }));
+    setProfileData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleNextStep = () => {
-    const tabs = ["personal", "class", "achievements", "quote"];
-    const nextIndex = tabs.indexOf(activeTab) + 1;
-    if (nextIndex < tabs.length) setActiveTab(tabs[nextIndex]);
+  const handlePhotoChange = async (e, type) => {
+    const file = e.target.files[0];
+    if (file) {
+      const b64 = await convertToBase64(file);
+      setProfileData((prev) => ({ ...prev, [type]: b64 }));
+    }
   };
 
-  const handleFinish = async () => {
-    setLoading(true);
-    console.log("A atualizar perfil no servidor...", profileData);
-
-    setTimeout(() => {
-      alert("✅ Perfil atualizado com sucesso!");
-      if (onFinish) onFinish();
-      setLoading(false);
-    }, 1000);
+  const removeAchievement = (indexToRemove) => {
+    setProfileData((prev) => ({
+      ...prev,
+      achievements: prev.achievements.filter(
+        (_, index) => index !== indexToRemove
+      ),
+    }));
   };
 
-  // Reutilizamos o teu componente auxiliar InputField
-  const InputField = ({
-    label,
-    name,
-    value,
-    onChange,
-    placeholder,
-    type = "text",
-  }) => (
-    <div className="input-field-wrapper">
-      <label>{label}</label>
-      <input
-        type={type}
-        name={name}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-      />
-    </div>
-  );
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      const response = await fetch(
+        `http://localhost:5005/api/profile/${userId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(profileData),
+        }
+      );
+      if (response.ok) {
+        alert("✅ Changes saved!");
+        navigate(`/profile/${userId}`);
+      }
+    } catch (error) {
+      alert("Error saving.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleModalSubmit = async (e) => {
+    e.preventDefault();
+    let achievementWithB64 = { ...newAchievement };
+    if (newAchievement.image instanceof File) {
+      achievementWithB64.image = await convertToBase64(newAchievement.image);
+    }
+    setProfileData((prevData) => ({
+      ...prevData,
+      achievements: [...prevData.achievements, achievementWithB64],
+    }));
+    setNewAchievement({ title: "", description: "", image: null });
+    setShowModal(false);
+  };
+
+  if (loading) return <div className="page">Loading...</div>;
 
   return (
     <div className="page">
       <div className="getstarted-main">
         <div className="getstarted-header">
           <h1>EDIT YOUR PROFILE</h1>
-          <h4>Keep your information up to date for the yearbook.</h4>
+          <h4>Update your information and keep your yearbook fresh.</h4>
         </div>
 
-        {/* Reutiliza o layout de fotos do GetStarted */}
         <div className="cover-wrapper">
           <div
             className="cover-upload"
-            onClick={() => document.getElementById("coverInput").click()}
+            onClick={() => document.getElementById("coverIn").click()}
           >
             <img
-              src={coverPhoto || "https://picsum.photos/1200/300"}
-              className="cover-photo"
+              src={
+                profileData.coverPhoto || "https://via.placeholder.com/1200x300"
+              }
               alt="Cover"
+              className="cover-photo"
             />
             <input
-              id="coverInput"
+              id="coverIn"
               type="file"
               hidden
-              onChange={(e) =>
-                setCoverPhoto(URL.createObjectURL(e.target.files[0]))
-              }
+              onChange={(e) => handlePhotoChange(e, "coverPhoto")}
             />
           </div>
           <div
             className="profile-upload"
-            onClick={() => document.getElementById("profileInput").click()}
+            onClick={() => document.getElementById("profileIn").click()}
           >
             <img
-              src={profilePhoto || "https://i.pravatar.cc/150"}
-              className="profile-photo"
+              src={
+                profileData.profilePhoto || "https://via.placeholder.com/150"
+              }
               alt="Profile"
+              className="profile-photo"
             />
             <input
-              id="profileInput"
+              id="profileIn"
               type="file"
               hidden
-              onChange={(e) =>
-                setProfilePhoto(URL.createObjectURL(e.target.files[0]))
-              }
+              onChange={(e) => handlePhotoChange(e, "profilePhoto")}
             />
           </div>
         </div>
@@ -141,29 +211,41 @@ export default function EditProfile({ userId, onFinish, existingData }) {
               <div className="columns-wrapper">
                 <div className="column">
                   <InputField
-                    label="First Name"
+                    label="First Name:"
                     name="firstName"
                     value={profileData.firstName}
                     onChange={handleInputChange}
                   />
                   <InputField
-                    label="Last Name"
+                    label="Last Name:"
                     name="lastName"
                     value={profileData.lastName}
+                    onChange={handleInputChange}
+                  />
+                  <InputField
+                    label="Email Address:"
+                    name="email"
+                    value={profileData.email}
                     onChange={handleInputChange}
                   />
                 </div>
                 <div className="column">
                   <InputField
-                    label="Hometown"
+                    label="Date of Birth:"
+                    name="dateOfBirth"
+                    value={profileData.dateOfBirth}
+                    onChange={handleInputChange}
+                  />
+                  <InputField
+                    label="Hometown:"
                     name="hometown"
                     value={profileData.hometown}
                     onChange={handleInputChange}
                   />
                   <InputField
-                    label="Email"
-                    name="email"
-                    value={profileData.email}
+                    label="City:"
+                    name="city"
+                    value={profileData.city}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -171,48 +253,153 @@ export default function EditProfile({ userId, onFinish, existingData }) {
             </div>
           )}
 
-          {activeTab === "quote" && (
-            <div className="tab quote quote-container">
-              <label>Edit Quote</label>
-              <textarea
-                name="quote"
-                value={profileData.quote}
-                onChange={handleInputChange}
-                maxLength={50}
-              />
-              <p>{profileData.quote.length}/50</p>
+          {activeTab === "class" && (
+            <div className="tab class">
+              <div className="columns-wrapper">
+                <div className="column">
+                  <InputField
+                    label="School/University:"
+                    name="school"
+                    value={profileData.school}
+                    onChange={handleInputChange}
+                  />
+                  <InputField
+                    label="Year/Graduation:"
+                    name="year"
+                    value={profileData.year}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="column">
+                  <InputField
+                    label="Course/Program:"
+                    name="course"
+                    value={profileData.course}
+                    onChange={handleInputChange}
+                  />
+                  <InputField
+                    label="Section/Group:"
+                    name="section"
+                    value={profileData.section}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
             </div>
           )}
 
-          {/* Adicionar aqui as tabs de Class e Achievements conforme o teu GetStarted */}
+          {activeTab === "achievements" && (
+            <div className="tab achievements">
+              <button
+                className="btn-add-achievement"
+                onClick={() => setShowModal(true)}
+              >
+                + Add Achievement
+              </button>
+              <div className="achievements-list">
+                {profileData.achievements.map((a, index) => (
+                  <div key={index} className="achievement-item">
+                    <button
+                      className="remove-badge"
+                      onClick={() => removeAchievement(index)}
+                    >
+                      ✕
+                    </button>
+                    <div className="achievement-text">
+                      <strong>{a.title}</strong>
+                      <p>{a.description}</p>
+                    </div>
+                    {a.image && (
+                      <img
+                        src={a.image}
+                        alt="Ach"
+                        className="achievement-image"
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === "quote" && (
+            <div className="tab quote-container">
+              <label>Favorite Quote</label>
+              <textarea
+                maxLength={50}
+                name="quote"
+                value={profileData.quote}
+                onChange={handleInputChange}
+              />
+              <div className="quote-counter">{profileData.quote.length}/50</div>
+            </div>
+          )}
         </div>
 
-        <div
-          className="edit-actions"
-          style={{ marginTop: "20px", display: "flex", gap: "10px" }}
-        >
-          {activeTab !== "quote" ? (
-            <button className="btn-continue" onClick={handleNextStep}>
-              Next
-            </button>
-          ) : (
-            <button
-              className="btn-continue btn-finish"
-              onClick={handleFinish}
-              disabled={loading}
-            >
-              {loading ? "Saving..." : "Save Changes"}
-            </button>
-          )}
+        <div className="edit-actions">
           <button
-            className="btn-secondary"
-            onClick={() => window.history.back()}
-            style={{ background: "#ccc" }}
+            className="btn-continue"
+            onClick={handleSave}
+            disabled={saving}
+          >
+            {saving ? "Saving..." : "Save Changes"}
+          </button>
+          <button
+            className="btn-action btn-cancel"
+            onClick={() => navigate(`/profile/${userId}`)}
           >
             Cancel
           </button>
         </div>
       </div>
+
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Add Achievement</h3>
+            <form onSubmit={handleModalSubmit}>
+              <input
+                type="text"
+                placeholder="Title"
+                value={newAchievement.title}
+                onChange={(e) =>
+                  setNewAchievement({
+                    ...newAchievement,
+                    title: e.target.value,
+                  })
+                }
+                required
+              />
+              <textarea
+                placeholder="Description"
+                value={newAchievement.description}
+                onChange={(e) =>
+                  setNewAchievement({
+                    ...newAchievement,
+                    description: e.target.value,
+                  })
+                }
+                required
+              />
+              <input
+                type="file"
+                onChange={(e) =>
+                  setNewAchievement({
+                    ...newAchievement,
+                    image: e.target.files[0],
+                  })
+                }
+              />
+              <div className="modal-buttons">
+                <button type="button" onClick={() => setShowModal(false)}>
+                  Cancel
+                </button>
+                <button type="submit">Add</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

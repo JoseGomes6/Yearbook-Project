@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
-export default function Register({ onSwitch, onRegisterSuccess }) {
+export default function Register({ onRegisterSuccess }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,33 +25,27 @@ export default function Register({ onSwitch, onRegisterSuccess }) {
     try {
       const response = await fetch("http://localhost:5005/api/auth/register", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          password,
-          email,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password, email }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        alert(`Conta criada com sucesso para ${data.username}!`);
-
-        // Passamos os dados (incluindo o _id gerado pelo MongoDB) para o App.jsx
+        // MUITO IMPORTANTE: Primeiro avisamos o App.jsx que o user logou
         if (onRegisterSuccess) {
           onRegisterSuccess(data);
         }
 
-        onSwitch("getstarted");
+        // Depois navegamos para o Get Started
+        // O App.jsx agora já sabe que o loggedInUser existe e deixa passar no PrivateRoute
+        navigate("/get-started");
       } else {
-        setError(data.message || "Erro no registo. Tente outro Username.");
+        setError(data.message || "Erro no registo.");
       }
     } catch (err) {
       console.error("Erro de conexão:", err);
-      setError("Não foi possível conectar ao servidor. Verifique o backend.");
+      setError("Servidor offline.");
     } finally {
       setLoading(false);
     }
@@ -59,12 +55,10 @@ export default function Register({ onSwitch, onRegisterSuccess }) {
     <div className="container-wrapper">
       <div className="container register-bg">
         <form className="auth-form-content" onSubmit={handleSubmit}>
-          <div>
-            <h1>Create Account</h1>
-            <h3>Fill in your details to get started.</h3>
-          </div>
+          <h1>Create Account</h1>
+          <h3>Fill in your details to get started.</h3>
 
-          {error && <p style={{ color: "red", margin: "10px 0" }}>{error}</p>}
+          {error && <p style={{ color: "red", fontWeight: "bold" }}>{error}</p>}
 
           <div className="input-wrapper">
             <FaUser className="input-icon" />
@@ -110,12 +104,12 @@ export default function Register({ onSwitch, onRegisterSuccess }) {
           </div>
 
           <button type="submit" disabled={loading}>
-            {loading ? "A Registar..." : "Get Started"}
+            {loading ? "A processar..." : "Get Started"}
           </button>
 
           <p className="auth-footer-text">
             Already have an account?{" "}
-            <span className="link-text" onClick={() => onSwitch("login")}>
+            <span className="link-text" onClick={() => navigate("/login")}>
               Sign In
             </span>
           </p>

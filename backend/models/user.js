@@ -1,5 +1,3 @@
-// backend/models/User.js
-
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
@@ -35,11 +33,18 @@ const UserSchema = new mongoose.Schema(
     // Guarda o ID de quem te enviou pedidos (pendentes)
     friendRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     // ----------------------------------------
+
+    signatures: [
+      {
+        message: String,
+        senderId: mongoose.Schema.Types.ObjectId,
+        senderName: String,
+        date: { type: Date, default: Date.now },
+      },
+    ],
   },
   { timestamps: true }
 );
-
-// ... (Resto do teu código: Middleware pre-save e matchPassword) ...
 
 UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();

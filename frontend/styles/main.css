@@ -11,6 +11,11 @@ body {
   overflow-x: hidden;
 }
 
+h1,
+h2 {
+  color: #273648;
+}
+
 /* ===================== LOGIN / REGISTER ===================== */
 .app-wrapper {
   position: relative;
@@ -39,6 +44,10 @@ body {
   justify-content: center;
   height: 100%;
   clip-path: polygon(70% 0, 56% 17%, 88% 72%, 66% 100%, 0 100%, 0% 0%);
+}
+
+.container h1 {
+  color: white;
 }
 
 .container::after {
@@ -81,6 +90,11 @@ body {
 
 .register-bg {
   background-color: #75906b;
+}
+
+.register-bg h1,
+h3 {
+  color: #2c4156;
 }
 
 .input-wrapper {
@@ -831,6 +845,29 @@ input {
   background-color: #0056b3;
 }
 
+.preview-small {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-top: 5px;
+}
+
+.get-started-form .form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.btn-cancel {
+  background: #ccc;
+  color: #333;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-left: 10px;
+  border-radius: 5px;
+}
 /* ================== ESTILOS INICIAIS DA SIDEBAR (EXPANDIDA) ================== */
 
 .app-sidebar {
@@ -1386,6 +1423,139 @@ input {
   color: var(--secondary-text-color, #777);
   font-size: 0.9rem;
   width: 70%; /* Dá espaço ao toggle switch */
+}
+
+/* Skeleton Animation */
+.skeleton {
+  background: #eee;
+  background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+  border-radius: 5px;
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+}
+
+@keyframes shimmer {
+  to {
+    background-position-x: -200%;
+  }
+}
+
+/* Skeleton Layout para o Request Card */
+.skeleton-card {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #f0f0f0;
+}
+
+.skeleton-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.skeleton-text-container {
+  flex: 1;
+}
+
+.skeleton-title {
+  width: 120px;
+  height: 18px;
+  margin-bottom: 8px;
+}
+
+.skeleton-subtitle {
+  width: 80px;
+  height: 14px;
+}
+
+.skeleton-btn {
+  width: 70px;
+  height: 32px;
+  margin-left: 10px;
+}
+
+/* Botões de Ação na base */
+.edit-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+  justify-content: flex-start;
+}
+
+.btn-action {
+  padding: 12px 25px;
+  border-radius: 8px;
+  height: 32px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  font-size: 1rem;
+  transition: opacity 0.2s;
+  min-width: 150px;
+}
+
+.btn-save {
+  background-color: #000;
+  color: #fff;
+}
+
+.btn-cancel {
+  background-color: #eee;
+  color: #333;
+}
+
+.btn-action:hover {
+  opacity: 0.8;
+}
+
+/* Cruz de remover nos achievements */
+.achievement-item {
+  position: relative;
+}
+
+.remove-badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ajuste Quote */
+.quote-container textarea {
+  width: 100%;
+  height: 80px;
+  padding: 15px;
+  border-radius: 8px;
+  border: 2px solid #eee;
+  resize: none;
+}
+
+.sidebar-btn .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px; /* Tamanho do ícone */
+}
+
+.sidebar-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 /* ===================== RESPONSIVO ===================== */

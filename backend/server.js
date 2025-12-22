@@ -210,3 +210,49 @@ app.post("/api/friends/decline", async (req, res) => {
     res.status(500).json({ message: "Erro ao recusar." });
   }
 });
+
+// Eliminar conta
+app.delete("/api/user/delete/:id", async (req, res) => {
+  await User.findByIdAndDelete(req.params.id);
+  res.status(200).send({ message: "Deleted" });
+});
+
+// Adicionar mensagens
+app.post("/api/profile/signature/:targetId", async (req, res) => {
+  const { targetId } = req.params;
+  const { senderId, message } = req.body;
+
+  try {
+    const sender = await User.findById(senderId);
+    const target = await User.findById(targetId);
+
+    if (!target || !sender) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Garante que o array existe antes de fazer push
+    if (!target.signatures) {
+      target.signatures = [];
+    }
+
+    // Criar o objeto da mensagem com fallback para o nome
+    const newSignature = {
+      message: message,
+      senderId: sender._id,
+      senderName: sender.firstName
+        ? `${sender.firstName} ${sender.lastName}`
+        : sender.username,
+      date: new Date(),
+    };
+
+    target.signatures.push(newSignature);
+    await target.save();
+
+    res.status(200).json({ message: "Signature added successfully!" });
+  } catch (error) {
+    console.error("Error saving signature:", error); // Isto vai aparecer no terminal do teu servidor
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+});
